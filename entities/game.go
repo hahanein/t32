@@ -11,8 +11,8 @@ type Game struct {
 	Board
 }
 
-type Board [][]rune
-
 type Pieces []Piece
 
 type Piece rune
+
+var NoPiece Piece
