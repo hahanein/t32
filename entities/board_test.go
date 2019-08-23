@@ -6,7 +6,7 @@ import (
 
 func TestLegalBoardSizes(t *testing.T) {
 	for size := MinSize; size <= MaxSize; size++ {
-		_, err := MakeBoard(size)
+		_, err := Game{Size: (size)}.Board()
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -17,14 +17,14 @@ func TestIllegalBoardSizes(t *testing.T) {
 	strErr := "false negative: %d is an illegal size"
 
 	for size := 0; size < MinSize; size++ {
-		_, err := MakeBoard(size)
+		_, err := Game{Size: (size)}.Board()
 		if err == nil {
 			t.Fatalf(strErr, size)
 		}
 	}
 
 	for size := MaxSize + 1; size < MaxSize+64; size++ {
-		_, err := MakeBoard(size)
+		_, err := Game{Size: (size)}.Board()
 		if err == nil {
 			t.Fatalf(strErr, size)
 		}
@@ -32,7 +32,7 @@ func TestIllegalBoardSizes(t *testing.T) {
 }
 
 func TestIsSquareEmpty(t *testing.T) {
-	b, _ := MakeBoard(MinSize)
+	b, _ := Game{Size: (MinSize)}.Board()
 	x, y := 0, 0
 
 	ok := b.isSquareEmpty(x, y)
@@ -49,7 +49,7 @@ func TestIsSquareEmpty(t *testing.T) {
 }
 
 func TestDoesSquareExist(t *testing.T) {
-	b, _ := MakeBoard(MinSize)
+	b, _ := Game{Size: (MinSize)}.Board()
 
 	for x := 0; x < MinSize; x++ {
 		ok := b.doesSquareExist(x, 0)
@@ -67,7 +67,7 @@ func TestDoesSquareExist(t *testing.T) {
 }
 
 func TestApplyMoveToBoard(t *testing.T) {
-	b, _ := MakeBoard(MinSize)
+	b, _ := Game{Size: (MinSize)}.Board()
 
 	_, err := b.apply()
 	if err != nil {

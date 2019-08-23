@@ -2,12 +2,6 @@ package entities
 
 import "errors"
 
-const (
-	MaxSize         = 10
-	MinSize         = 3
-	RequiredPlayers = 3
-)
-
 var (
 	ErrIllegalDimensions = errors.New("board: illegal dimensions")
 	ErrIllegalMove       = errors.New("board: illegal move")
@@ -16,22 +10,6 @@ var (
 // A Board is a matrix with equal length dimensions. It records the positions
 // of all Pieces.
 type Board [][]Piece
-
-// MakeBoard derives a Board from a given size and a sequence of Moves. If Move
-// coordinates are duplicates or out of bounds it returns an error.
-func MakeBoard(size int, ms ...Move) (Board, error) {
-	b := make(Board, size)
-	for x, _ := range b {
-		b[x] = make([]Piece, size)
-	}
-
-	err := b.validate()
-	if err != nil {
-		return b, err
-	}
-
-	return b.apply(ms...)
-}
 
 // validate checks if the Board adheres to the game's specifications and
 // returns an error if it is corrupted.

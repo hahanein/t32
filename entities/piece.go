@@ -5,32 +5,16 @@ import (
 )
 
 var (
-	ErrIllegalPieceInQueue = errors.New("queue: illegal piece")
-	ErrIllegalPiece        = errors.New("pieces: illegal piece")
-	ErrDuplicatePieces     = errors.New("pieces: duplicate pieces")
+	ErrIllegalPiece    = errors.New("pieces: illegal piece")
+	ErrDuplicatePieces = errors.New("pieces: duplicate pieces")
 )
 
+// Piece is the symbol of a given player. A Piece is unique.
 type Piece rune
 
 type Pieces []Piece
 
 var NoPiece Piece
-
-// MakeCurrentPiece derives the Piece currently waiting in Line from a
-// collection of Pieces and a sequence of Moves.
-func MakeCurrentPiece(ps Pieces, ms ...Move) (Piece, error) {
-	for i := 0; i < len(ms); i++ {
-		j := i % len(ps)
-
-		if ps[j] != ms[i].Piece {
-			return NoPiece, ErrIllegalPieceInQueue
-		}
-	}
-
-	i := len(ms) % len(ps)
-
-	return ps[i], nil
-}
 
 // validate checks if the list of Pieces adheres to the game's specifications
 // and returns an error if it is corrupted.
