@@ -11,8 +11,9 @@ var (
 // of all Pieces.
 type Board [][]Piece
 
-// NewBoard returns a new empty Board of a given size.
-func NewBoard(size int) (*Board, error) {
+// MakeBoard returns a Board with all provided Moves applied. It returns an
+// error if Move coordinates are duplicate or out of bounds.
+func MakeBoard(size int, ms ...Move) (Board, error) {
 	b := make(Board, size)
 	for x, _ := range b {
 		b[x] = make([]Piece, size)
@@ -20,26 +21,26 @@ func NewBoard(size int) (*Board, error) {
 
 	err := b.validate()
 	if err != nil {
-		return &b, err
+		return b, err
 	}
 
-	return &b, nil
+	return b.apply(ms...)
 }
 
 // validate checks if the Board adheres to the game's specifications and
 // returns an error if it is corrupted.
-func (b *Board) validate() error {
-	xSize := len(*b)
+func (b Board) validate() error {
+	xSize := len(b)
 
 	for x := 0; x < xSize; x++ {
-		ySize := len((*b)[x])
+		ySize := len(b[x])
 
 		if ySize != xSize {
 			return ErrIllegalDimensions
 		}
 	}
 
-	isIllegalSize := xSize < MinBoardSize || xSize > MaxBoardSize
+	isIllegalSize := xSize < MinSize || xSize > MaxSize
 
 	if isIllegalSize {
 		return ErrIllegalDimensions
@@ -48,40 +49,42 @@ func (b *Board) validate() error {
 	return nil
 }
 
-// Apply applies a Move. If the Move is illegal it returns an error. Otherwise
+// apply applies a Move. If the Move is illegal it returns an error. Otherwise
 // it mutates the Board to make it reflect the new state.
-func (b *Board) Apply(m Move) error {
-	ok := b.doesSquareExist(m.X, m.Y)
-	if !ok {
-		return ErrIllegalMove
+func (b Board) apply(ms ...Move) (Board, error) {
+	for _, m := range ms {
+		ok := b.doesSquareExist(m.X, m.Y)
+		if !ok {
+			return b, ErrIllegalMove
+		}
+
+		ok = b.isSquareEmpty(m.X, m.Y)
+		if !ok {
+			return b, ErrIllegalMove
+		}
+
+		b[m.X][m.Y] = m.Piece
 	}
 
-	ok = b.isSquareEmpty(m.X, m.Y)
-	if !ok {
-		return ErrIllegalMove
-	}
-
-	(*b)[m.X][m.Y] = m.Piece
-
-	return nil
+	return b, nil
 }
 
 // isSquareEmpty checks if any Piece is occupying a given square and returns
 // false if this is the case. Otherwise it returns true.
-func (b *Board) isSquareEmpty(x, y int) bool {
-	return (*b)[x][y] == NoPiece
+func (b Board) isSquareEmpty(x, y int) bool {
+	return (b)[x][y] == NoPiece
 }
 
 // doesSquareExist checks if a square exists at a given position on the Board
 // and returns true if this is the case. Otherwise it returns false.
-func (b *Board) doesSquareExist(x, y int) bool {
-	doesXExist := x >= 0 && x < len(*b)
+func (b Board) doesSquareExist(x, y int) bool {
+	doesXExist := x >= 0 && x < len(b)
 
 	if !doesXExist {
 		return false
 	}
 
-	doesYExist := y >= 0 && y < len((*b)[x])
+	doesYExist := y >= 0 && y < len(b[x])
 
 	if !doesYExist {
 		return false

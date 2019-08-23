@@ -5,8 +5,8 @@ import (
 )
 
 func TestLegalBoardSizes(t *testing.T) {
-	for size := MinBoardSize; size <= MaxBoardSize; size++ {
-		_, err := NewBoard(size)
+	for size := MinSize; size <= MaxSize; size++ {
+		_, err := MakeBoard(size)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -16,15 +16,15 @@ func TestLegalBoardSizes(t *testing.T) {
 func TestIllegalBoardSizes(t *testing.T) {
 	strErr := "false negative: %d is an illegal size"
 
-	for size := 0; size < MinBoardSize; size++ {
-		_, err := NewBoard(size)
+	for size := 0; size < MinSize; size++ {
+		_, err := MakeBoard(size)
 		if err == nil {
 			t.Fatalf(strErr, size)
 		}
 	}
 
-	for size := MaxBoardSize + 1; size < MaxBoardSize+64; size++ {
-		_, err := NewBoard(size)
+	for size := MaxSize + 1; size < MaxSize+64; size++ {
+		_, err := MakeBoard(size)
 		if err == nil {
 			t.Fatalf(strErr, size)
 		}
@@ -32,7 +32,7 @@ func TestIllegalBoardSizes(t *testing.T) {
 }
 
 func TestIsSquareEmpty(t *testing.T) {
-	b, _ := NewBoard(MinBoardSize)
+	b, _ := MakeBoard(MinSize)
 	x, y := 0, 0
 
 	ok := b.isSquareEmpty(x, y)
@@ -40,7 +40,7 @@ func TestIsSquareEmpty(t *testing.T) {
 		t.Fatalf("false positive: square %d,%d should be empty", x, y)
 	}
 
-	(*b)[x][y] = 'X'
+	b[x][y] = 'X'
 
 	ok = b.isSquareEmpty(x, y)
 	if ok {
@@ -49,16 +49,16 @@ func TestIsSquareEmpty(t *testing.T) {
 }
 
 func TestDoesSquareExist(t *testing.T) {
-	b, _ := NewBoard(MinBoardSize)
+	b, _ := MakeBoard(MinSize)
 
-	for x := 0; x < MinBoardSize; x++ {
+	for x := 0; x < MinSize; x++ {
 		ok := b.doesSquareExist(x, 0)
 		if !ok {
 			t.Fatalf("false positive: square %d,0 should exist", x)
 		}
 	}
 
-	for x := MinBoardSize; x < MinBoardSize+64; x++ {
+	for x := MinSize; x < MinSize+64; x++ {
 		ok := b.doesSquareExist(x, 0)
 		if ok {
 			t.Fatalf("false negative: square %d,0 should not exist", x)
@@ -66,16 +66,22 @@ func TestDoesSquareExist(t *testing.T) {
 	}
 }
 
-func TestApplyMove(t *testing.T) {
-	b, _ := NewBoard(MinBoardSize)
-	m := Move{'X', 0, 0}
+func TestApplyMoveToBoard(t *testing.T) {
+	b, _ := MakeBoard(MinSize)
 
-	err := b.Apply(m)
+	_, err := b.apply()
 	if err != nil {
 		t.Fatalf("false positive: %s", err)
 	}
 
-	err = b.Apply(m)
+	m := Move{'X', 0, 0}
+
+	b2, err := b.apply(m)
+	if err != nil {
+		t.Fatalf("false positive: %s", err)
+	}
+
+	_, err = b2.apply(m)
 	if err == nil {
 		t.Fatalf("false negative: should return an error because square %d,%d is occupied", m.X, m.Y)
 	}
