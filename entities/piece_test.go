@@ -20,3 +20,20 @@ func TestMakeCurrentPiece(t *testing.T) {
 	}
 
 }
+
+func TestHasUniqItemsOnly(t *testing.T) {
+	ps := Pieces{'A', 'B', 'C'}
+
+	ok := ps.hasUniqItemsOnly()
+	if !ok {
+		t.Fatal("false positive: list has no duplicate items")
+	}
+
+	ps = append(ps, 'C')
+
+	ok = ps.hasUniqItemsOnly()
+	if ok {
+		t.Fatal("false negative: list has duplicate items")
+	}
+
+}
