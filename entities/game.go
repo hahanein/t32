@@ -16,3 +16,8 @@ type Pieces []Piece
 type Piece rune
 
 var NoPiece Piece
+
+type Move struct {
+	Piece Piece
+	X, Y  int
+}
