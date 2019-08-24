@@ -2,7 +2,7 @@ package game
 
 import "testing"
 
-func TestCurrentPlayer(t *testing.T) {
+func TestNextPlayer(t *testing.T) {
 	g, _ := Make(MinSize, Players{'A', 'B', 'C'},
 		Move{'A', 0, 0},
 		Move{'B', 1, 0},
@@ -10,7 +10,7 @@ func TestCurrentPlayer(t *testing.T) {
 		Move{'A', 0, 1},
 	)
 
-	p := g.CurrentPlayer()
+	p := g.NextPlayer()
 
 	if p != 'B' {
 		t.Fatalf("false player: wanted B have %c", p)

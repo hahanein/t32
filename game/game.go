@@ -40,6 +40,8 @@ func Make(s Size, ps Players, ms ...Move) (Game, error) {
 	return g, nil
 }
 
+// Validate determines a game's legality with regards to the Tic Tac Toe 2.0
+// specifications and returns an error if they've been broken.
 func Validate(g Game) error {
 	err := g.Size.Validate()
 	if err != nil {
@@ -86,8 +88,8 @@ func (g Game) Board() Board {
 	return b
 }
 
-// CurrentPlayer derives the Player currently waiting in Line.
-func (g Game) CurrentPlayer() Player {
+// NextPlayer derives the Player currently waiting in Line.
+func (g Game) NextPlayer() Player {
 	if len(g.History) == 0 && len(g.Players) > 0 {
 		return g.Players[0]
 	} else if len(g.History) == 0 {
