@@ -1,1 +1,3 @@
 Function which creates a valid list of players (unique, complete, printable, different from NoPlayer)
+Function which checks if a game has finished
+Function which tries to determine a winner
