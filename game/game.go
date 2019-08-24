@@ -8,7 +8,7 @@ const (
 	MaxSize = 10
 	MinSize = 3
 
-	RequiredNumberOfPlayers = 3
+	RequiredNumberOfPieces = 3
 )
 
 var (
@@ -26,62 +26,54 @@ type Move struct {
 // Game is the complete set of data necessary to derive every available piece
 // of information about a given Game.
 type Game struct {
-	Size int
+	Size
 	Pieces
 	History
 }
 
-// MakeGame either returns a GUARANTEED LEGAL Tic Tac Toe 2.0 game state or an
+// Make either returns a GUARANTEED LEGAL Tic Tac Toe 2.0 game state or an
 // error.
-func MakeGame(size int, ps Pieces, ms ...Move) (Game, error) {
-	var g Game
+func Make(s Size, ps Pieces, ms ...Move) (Game, error) {
+	g := Game{s, ps, ms}
 
-	if size < MinSize || size > MaxSize {
-		return g, ErrIllegalSize
-	}
-
-	g.Size = size
-
-	err := ps.validate()
+	err := Validate(g.Size, g.Pieces, g.History...)
 	if err != nil {
 		return g, err
 	}
 
-	g.Pieces = ps
-
-	return g.apply(ms...)
+	return g, nil
 }
 
-func (g Game) apply(ms ...Move) (Game, error) {
-	h := append(g.History, ms...)
+func Validate(s Size, ps Pieces, ms ...Move) error {
+	if s < MinSize || s > MaxSize {
+		return ErrIllegalSize
+	}
 
+	err := ps.Validate()
+	if err != nil {
+		return err
+	}
+
+	var h History = ms
 	for i, _ := range h {
 		ok := h[:i].isSquareEmpty(h[i].X, h[i].Y)
 		if !ok {
-			return g, ErrIllegalMove
+			return ErrIllegalMove
 		}
 
-		ok = g.doesSquareExist(h[i].X, h[i].Y)
+		ok = s.doesSquareExist(h[i].X, h[i].Y)
 		if !ok {
-			return g, ErrIllegalMove
+			return ErrIllegalMove
 		}
 
-		ok = h[:i].isValidPieceSequence(g.Pieces)
+		ok = h[:i].isValidPieceSequence(ps)
 		if !ok {
-			return g, ErrIllegalMove
+			return ErrIllegalMove
 		}
 
 	}
 
-	g.History = h
-
-	return g, nil
-}
-
-// doesSquareExist checks if a square exists at a given position on the Board
-// and returns true if this is the case. Otherwise it returns false.
-func (g Game) doesSquareExist(x, y int) bool {
-	return (x >= 0 && x < g.Size) && (y >= 0 && y < g.Size)
+	return nil
 }
 
 // Board derives a Board from the current Game. If Move coordinates in the

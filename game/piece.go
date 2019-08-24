@@ -5,23 +5,24 @@ import (
 )
 
 var (
-	ErrIllegalPiece        = errors.New("pieces: has illegal piece")
-	ErrDuplicatePieces     = errors.New("pieces: has duplicate pieces")
-	ErrWrongNumberOfPieces = errors.New("pieces: has wrong number of pieces")
+	ErrIllegalPiece    = errors.New("pieces: has illegal piece")
+	ErrDuplicatePieces = errors.New("pieces: has duplicate pieces")
+	ErrPiecesMissing   = errors.New("pieces: some pieces are missing")
+	ErrTooManyPieces   = errors.New("pieces: too many pieces")
 )
 
-// Piece is the symbol of a given player. A Piece must be unique to a player,
-// it must be a printable character and it must be different from the NoPiece
-// character.
+// Piece is the symbol of a given participant. A Piece must be unique to a
+// participant, it must be a printable character and it must be different from
+// the NoPiece character.
 type Piece rune
 
 type Pieces []Piece
 
 var NoPiece Piece
 
-// validate checks if the list of Pieces adheres to the game's specifications
+// Validate checks if the list of Pieces adheres to the game's specifications
 // and returns an error if it is corrupted.
-func (ps Pieces) validate() error {
+func (ps Pieces) Validate() error {
 	for i, _ := range ps {
 		if ps[i] == NoPiece {
 			return ErrIllegalPiece
@@ -33,9 +34,12 @@ func (ps Pieces) validate() error {
 		return ErrDuplicatePieces
 	}
 
-	ok = ps.hasRequiredNumberOfItems()
-	if !ok {
-		return ErrWrongNumberOfPieces
+	if len(ps) < RequiredNumberOfPieces {
+		return ErrPiecesMissing
+	}
+
+	if len(ps) > RequiredNumberOfPieces {
+		return ErrTooManyPieces
 	}
 
 	return nil
@@ -50,15 +54,5 @@ func (ps Pieces) hasUniqItemsOnly() bool {
 		m[p] = struct{}{}
 	}
 
-	if len(ps) != len(m) {
-		return false
-	}
-
-	return true
-}
-
-// hasRequiredNumberOfItems returns true if its length reflects the required
-// number of players.
-func (ps Pieces) hasRequiredNumberOfItems() bool {
-	return len(ps) == RequiredNumberOfPlayers
+	return len(ps) == len(m)
 }
