@@ -3,7 +3,7 @@ package game
 import "testing"
 
 func TestIsSquareEmpty(t *testing.T) {
-	g, _ := Make(MinSize, Pieces{'A', 'B', 'C'})
+	g, _ := Make(MinSize, Players{'A', 'B', 'C'})
 	x, y := 0, 0
 
 	ok := g.isSquareEmpty(x, y)

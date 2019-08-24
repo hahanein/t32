@@ -4,12 +4,12 @@ package game
 type History []Move
 
 // isSquareEmpty checks if a given square is empty and returns true if this is
-// the case. If any Piece is occupying the square it returns false.
+// the case. If any Player is occupying the square it returns false.
 func (h History) isSquareEmpty(x, y int) bool {
 	return !h.isSquareOccupied(x, y)
 }
 
-// isSquareOccupied checks if a Piece is occupying a given square and returns
+// isSquareOccupied checks if a Player is occupying a given square and returns
 // true if this is the case. If it is empty it returns false.
 func (h History) isSquareOccupied(x, y int) bool {
 	for i, _ := range h {
@@ -21,13 +21,13 @@ func (h History) isSquareOccupied(x, y int) bool {
 	return false
 }
 
-// isValidPieceSequence returns true if a sequence of Pieces in a History is
-// valid given a specific list of Pieces.
-func (h History) isValidPieceSequence(ps Pieces) bool {
+// isValidPlayerSequence returns true if a sequence of Players in a History is
+// valid given a specific list of Players.
+func (h History) isValidPlayerSequence(ps Players) bool {
 	for i, _ := range h {
 		j := i % len(ps)
 
-		if ps[j] != h[i].Piece {
+		if ps[j] != h[i].Player {
 			return false
 		}
 	}

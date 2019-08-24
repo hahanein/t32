@@ -8,7 +8,7 @@ const (
 	MaxSize = 10
 	MinSize = 3
 
-	RequiredNumberOfPieces = 3
+	RequiredNumberOfPlayers = 3
 )
 
 var (
@@ -16,27 +16,27 @@ var (
 	ErrIllegalMove = errors.New("game: illegal move")
 )
 
-// Move represents a Player's intended action. It contains their Piece as well
+// Move represents a Player's intended action. It contains their Player as well
 // as Board coordinates.
 type Move struct {
-	Piece Piece
-	X, Y  int
+	Player
+	X, Y int
 }
 
-// Game is the complete set of data necessary to derive every available piece
-// of information about a given Game.
+// Game is the complete set of data necessary to derive all necessary
+// informations about a given Game from.
 type Game struct {
 	Size
-	Pieces
+	Players
 	History
 }
 
 // Make either returns a GUARANTEED LEGAL Tic Tac Toe 2.0 game state or an
 // error.
-func Make(s Size, ps Pieces, ms ...Move) (Game, error) {
+func Make(s Size, ps Players, ms ...Move) (Game, error) {
 	g := Game{s, ps, ms}
 
-	err := Validate(g.Size, g.Pieces, g.History...)
+	err := Validate(g.Size, g.Players, g.History...)
 	if err != nil {
 		return g, err
 	}
@@ -44,7 +44,7 @@ func Make(s Size, ps Pieces, ms ...Move) (Game, error) {
 	return g, nil
 }
 
-func Validate(s Size, ps Pieces, ms ...Move) error {
+func Validate(s Size, ps Players, ms ...Move) error {
 	if s < MinSize || s > MaxSize {
 		return ErrIllegalSize
 	}
@@ -66,7 +66,7 @@ func Validate(s Size, ps Pieces, ms ...Move) error {
 			return ErrIllegalMove
 		}
 
-		ok = h[:i].isValidPieceSequence(ps)
+		ok = h[:i].isValidPlayerSequence(ps)
 		if !ok {
 			return ErrIllegalMove
 		}
@@ -81,27 +81,27 @@ func Validate(s Size, ps Pieces, ms ...Move) error {
 func (g Game) Board() Board {
 	b := make(Board, g.Size)
 	for x, _ := range b {
-		b[x] = make([]Piece, g.Size)
+		b[x] = make([]Player, g.Size)
 	}
 
 	for _, m := range g.History {
-		b[m.X][m.Y] = m.Piece
+		b[m.X][m.Y] = m.Player
 	}
 
 	return b
 }
 
-// CurrentPiece derives the Piece currently waiting in Line.
-func (g Game) CurrentPiece() Piece {
-	if len(g.History) == 0 && len(g.Pieces) > 0 {
-		return g.Pieces[0]
+// CurrentPlayer derives the Player currently waiting in Line.
+func (g Game) CurrentPlayer() Player {
+	if len(g.History) == 0 && len(g.Players) > 0 {
+		return g.Players[0]
 	} else if len(g.History) == 0 {
 		// TODO: Maybe we should just Panic since at this point
 		// everything must've went wrong.
-		return NoPiece
+		return NoPlayer
 	}
 
-	i := len(g.History) % len(g.Pieces)
+	i := len(g.History) % len(g.Players)
 
-	return g.Pieces[i]
+	return g.Players[i]
 }
