@@ -5,11 +5,14 @@ import (
 )
 
 var (
-	ErrIllegalPiece    = errors.New("pieces: illegal piece")
-	ErrDuplicatePieces = errors.New("pieces: duplicate pieces")
+	ErrIllegalPiece        = errors.New("pieces: has illegal piece")
+	ErrDuplicatePieces     = errors.New("pieces: has duplicate pieces")
+	ErrWrongNumberOfPieces = errors.New("pieces: has wrong number of pieces")
 )
 
-// Piece is the symbol of a given player. A Piece is unique.
+// Piece is the symbol of a given player. A Piece must be unique to a player,
+// it must be a printable character and it must be different from the NoPiece
+// character.
 type Piece rune
 
 type Pieces []Piece
@@ -30,6 +33,11 @@ func (ps Pieces) validate() error {
 		return ErrDuplicatePieces
 	}
 
+	ok = ps.hasRequiredNumberOfItems()
+	if !ok {
+		return ErrWrongNumberOfPieces
+	}
+
 	return nil
 }
 
@@ -47,4 +55,10 @@ func (ps Pieces) hasUniqItemsOnly() bool {
 	}
 
 	return true
+}
+
+// hasRequiredNumberOfItems returns true if its length reflects the required
+// number of players.
+func (ps Pieces) hasRequiredNumberOfItems() bool {
+	return len(ps) == RequiredNumberOfPlayers
 }

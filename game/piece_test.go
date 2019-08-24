@@ -2,25 +2,21 @@ package game
 
 import "testing"
 
-func TestMakeCurrentPiece(t *testing.T) {
-	p, err := Game{
-		Pieces: []Piece{'A', 'B', 'C'},
-		History: History{
-			Move{'A', 0, 0},
-			Move{'B', 1, 0},
-			Move{'C', 1, 1},
-			Move{'A', 0, 1},
-		},
-	}.CurrentPiece()
+// TODO: Function which creates a valid sequence of Pieces.
 
-	if err != nil {
-		t.Fatal(err)
-	}
+func TestMakeCurrentPiece(t *testing.T) {
+	g, _ := MakeGame(MinSize, Pieces{'A', 'B', 'C'},
+		Move{'A', 0, 0},
+		Move{'B', 1, 0},
+		Move{'C', 1, 1},
+		Move{'A', 0, 1},
+	)
+
+	p := g.CurrentPiece()
 
 	if p != 'B' {
 		t.Fatalf("false piece: wanted B have %c", p)
 	}
-
 }
 
 func TestHasUniqItemsOnly(t *testing.T) {
@@ -37,5 +33,20 @@ func TestHasUniqItemsOnly(t *testing.T) {
 	if ok {
 		t.Fatal("false negative: list has duplicate items")
 	}
+}
 
+func TestHasRequiredNumberOfItems(t *testing.T) {
+	ps := Pieces{'A', 'B', 'C'}
+
+	ok := ps.hasRequiredNumberOfItems()
+	if !ok {
+		t.Fatal("false positive: list has required number of items")
+	}
+
+	ps = append(ps, 'D')
+
+	ok = ps.hasRequiredNumberOfItems()
+	if ok {
+		t.Fatal("false negative: list has more items than required")
+	}
 }

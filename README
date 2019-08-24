@@ -1,1 +1,9 @@
-t32 - tic tac toe 2.0
+t32 - tic tac toe 2.0                                          Benjamin Westphal
+
+
+                                    Packages
+
+t32/game:
+        This package contains data structures and pure functions which
+        encapsulate the most general and high-level rules of the program.
+        
