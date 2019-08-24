@@ -4,6 +4,79 @@ import (
 	"testing"
 )
 
+var gmsLegal = []Game{
+	Game{
+		3,
+		Players{'A', 'B', 'C'},
+		History{},
+	},
+	Game{
+		10,
+		Players{'Ä', 'B', '😛'},
+		History{
+			Move{'Ä', 0, 0},
+		},
+	},
+	Game{
+		5,
+		Players{'1', '2', '3'},
+		History{
+			Move{'1', 0, 0},
+			Move{'2', 2, 0},
+			Move{'3', 0, 1},
+			Move{'1', 0, 2},
+			Move{'2', 3, 0},
+			Move{'3', 0, 3},
+		},
+	},
+}
+
+var gmsIllegal = []Game{
+	Game{
+		1,
+		Players{'A', 'B', 'C'},
+		History{},
+	},
+	Game{
+		5,
+		Players{'A', 'B'},
+		History{},
+	},
+	Game{
+		10,
+		Players{'Ä', 'B', NoPlayer},
+		History{
+			Move{'Ä', 0, 0},
+		},
+	},
+	Game{
+		5,
+		Players{'1', '2', '3'},
+		History{
+			Move{'1', 0, 0},
+			Move{'2', 2, 0},
+			Move{'3', 0, 1},
+			Move{'1', 0, 2},
+			Move{'2', 3, 0},
+			Move{'3', 0, 3},
+			Move{'1', 0, 0},
+		},
+	},
+	Game{
+		4,
+		Players{'1', '2', '3'},
+		History{
+			Move{'1', 0, 0},
+			Move{'2', 2, 0},
+			Move{'3', 0, 1},
+			Move{'2', 3, 0},
+			Move{'1', 0, 2},
+			Move{'3', 0, 3},
+			Move{'1', 0, 0},
+		},
+	},
+}
+
 func TestLegalSizes(t *testing.T) {
 	var s Size
 
@@ -36,9 +109,18 @@ func TestIllegalSizes(t *testing.T) {
 }
 
 func TestValidate(t *testing.T) {
-	err := Validate(MinSize, Players{'A', 'B', 'C'})
-	if err != nil {
-		t.Fatal("false positive:", err)
+	for i, g := range gmsLegal {
+		err := Validate(g)
+		if err != nil {
+			t.Fatal("false positive:", i, err)
+		}
+	}
+
+	for i, g := range gmsIllegal {
+		err := Validate(g)
+		if err == nil {
+			t.Fatal("false negative:", i, g)
+		}
 	}
 }
 

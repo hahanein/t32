@@ -5,14 +5,10 @@ import (
 )
 
 const (
-	MaxSize = 10
-	MinSize = 3
-
 	RequiredNumberOfPlayers = 3
 )
 
 var (
-	ErrIllegalSize = errors.New("game: illegal size")
 	ErrIllegalMove = errors.New("game: illegal move")
 )
 
@@ -36,7 +32,7 @@ type Game struct {
 func Make(s Size, ps Players, ms ...Move) (Game, error) {
 	g := Game{s, ps, ms}
 
-	err := Validate(g.Size, g.Players, g.History...)
+	err := Validate(g)
 	if err != nil {
 		return g, err
 	}
@@ -44,33 +40,32 @@ func Make(s Size, ps Players, ms ...Move) (Game, error) {
 	return g, nil
 }
 
-func Validate(s Size, ps Players, ms ...Move) error {
-	if s < MinSize || s > MaxSize {
-		return ErrIllegalSize
-	}
-
-	err := ps.Validate()
+func Validate(g Game) error {
+	err := g.Size.Validate()
 	if err != nil {
 		return err
 	}
 
-	var h History = ms
-	for i, _ := range h {
-		ok := h[:i].isSquareEmpty(h[i].X, h[i].Y)
+	err = g.Players.Validate()
+	if err != nil {
+		return err
+	}
+
+	for i, m := range g.History {
+		ok := g.History[:i].isSquareEmpty(m.X, m.Y)
 		if !ok {
 			return ErrIllegalMove
 		}
 
-		ok = s.doesSquareExist(h[i].X, h[i].Y)
+		ok = g.Size.doesSquareExist(m.X, m.Y)
 		if !ok {
 			return ErrIllegalMove
 		}
 
-		ok = h[:i].isValidPlayerSequence(ps)
+		ok = g.History[:i].isValidPlayerSequence(g.Players)
 		if !ok {
 			return ErrIllegalMove
 		}
-
 	}
 
 	return nil
