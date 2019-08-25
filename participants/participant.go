@@ -22,8 +22,19 @@ type Participant struct {
 	game.Player
 }
 
-func (p *Participant) joinGame() {
+// join asks the Referee to join the Game.
+func (p *Participant) join() {
 	err := p.PushPlayer(p.Player)
+	if err != nil {
+		return
+	}
+}
+
+// move asks the Referee to accept a Participant's next Move.
+func (p *Participant) move() {
+	x, y := p.PopCoordinates()
+
+	err := p.PushMove(game.Move{p.Player, x, y})
 	if err != nil {
 		return
 	}
