@@ -16,7 +16,7 @@ func (r *SpyReferee) GetGame() (game.Game, error) {
 	return r.Game, nil
 }
 
-func (r *SpyReferee) SetPlayer(p game.Player) error {
+func (r *SpyReferee) PushPlayer(p game.Player) error {
 	r.Players = append(r.Players, p)
 	return nil
 }

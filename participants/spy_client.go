@@ -1,28 +1,12 @@
 package actors
 
-import "t32/game"
-
 type SpyCoordinates struct {
 	X, Y int
 }
 
 type SpyClient struct {
-	Players     []game.Player
 	Coordinates []SpyCoordinates
 	Err         error
-}
-
-func (c *SpyClient) PopPlayer() game.Player {
-	if len(c.Players) == 0 {
-		return game.NoPlayer
-	}
-
-	var symbol game.Player
-
-	symbol, c.Players = c.Players[len(c.Players)-1],
-		c.Players[:len(c.Players)-1]
-
-	return symbol
 }
 
 func (c *SpyClient) PopCoordinates() (int, int) {
