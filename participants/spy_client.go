@@ -1,16 +1,16 @@
 package actors
 
-type SpyCoordinates struct {
+type spyCoordinates struct {
 	X, Y int
 }
 
-type SpyClient struct {
-	Coordinates []SpyCoordinates
+type spyClient struct {
+	Coordinates []spyCoordinates
 	Err         error
 }
 
-func (c *SpyClient) PopCoordinates() (int, int) {
-	var co SpyCoordinates
+func (c *spyClient) PopCoordinates() (int, int) {
+	var co spyCoordinates
 
 	if len(c.Coordinates) == 0 {
 		return co.X, co.Y
@@ -22,6 +22,6 @@ func (c *SpyClient) PopCoordinates() (int, int) {
 	return co.X, co.Y
 }
 
-func (c *SpyClient) Fatal(err error) {
+func (c *spyClient) Fatal(err error) {
 	c.Err = err
 }

@@ -2,25 +2,25 @@ package actors
 
 import "t32/game"
 
-type SpyReferee struct {
+type spyReferee struct {
 	game.Game
 	Err error
 }
 
-func (r *SpyReferee) PushMove(m game.Move) error {
+func (r *spyReferee) PushMove(m game.Move) error {
 	r.History = append(r.History, m)
 	return nil
 }
 
-func (r *SpyReferee) GetGame() (game.Game, error) {
+func (r *spyReferee) GetGame() (game.Game, error) {
 	return r.Game, nil
 }
 
-func (r *SpyReferee) PushPlayer(p game.Player) error {
+func (r *spyReferee) PushPlayer(p game.Player) error {
 	r.Players = append(r.Players, p)
 	return nil
 }
 
-func (r *SpyReferee) Fatal(err error) {
+func (r *spyReferee) Fatal(err error) {
 	r.Err = err
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func TestJoin(t *testing.T) {
-	r := new(SpyReferee)
+	r := new(spyReferee)
 
 	p := &Participant{
 		Player:  'X',
@@ -23,12 +23,12 @@ func TestJoin(t *testing.T) {
 }
 
 func TestMove(t *testing.T) {
-	r := new(SpyReferee)
+	r := new(spyReferee)
 
-	coords := SpyCoordinates{1, 2}
+	coords := spyCoordinates{1, 2}
 
-	c := &SpyClient{
-		Coordinates: []SpyCoordinates{coords},
+	c := &spyClient{
+		Coordinates: []spyCoordinates{coords},
 	}
 
 	p := &Participant{

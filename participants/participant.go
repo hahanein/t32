@@ -1,15 +1,10 @@
 package actors
 
 import (
+	"log"
+	"t32/actors"
 	"t32/game"
 )
-
-type Referee interface {
-	PushMove(game.Move) error
-	GetGame() (game.Game, error)
-	PushPlayer(game.Player) error
-	Fatal(error)
-}
 
 type Client interface {
 	PopCoordinates() (int, int)
@@ -17,7 +12,7 @@ type Client interface {
 }
 
 type Participant struct {
-	Referee
+	actors.Referee
 	Client
 	game.Player
 }
@@ -25,8 +20,14 @@ type Participant struct {
 // join asks the Referee to join the Game.
 func (p *Participant) join() {
 	err := p.PushPlayer(p.Player)
-	if err != nil {
-		return
+
+	switch err {
+	case nil:
+		// Do nothing.
+	case actors.ErrGameFull:
+	case actors.ErrPlayerTaken:
+	default:
+		log.Fatal(err)
 	}
 }
 
@@ -35,7 +36,13 @@ func (p *Participant) move() {
 	x, y := p.PopCoordinates()
 
 	err := p.PushMove(game.Move{p.Player, x, y})
-	if err != nil {
-		return
+
+	switch err {
+	case nil:
+		// Do nothing.
+	case game.ErrIllegalMove:
+		p.move()
+	default:
+		log.Fatal(err)
 	}
 }
