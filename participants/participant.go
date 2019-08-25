@@ -17,7 +17,7 @@ import (
 
 type Client interface {
 	PopCoordinates() (int, int)
-	Fatal(error)
+	SetGame(game.Game)
 }
 
 type Participant struct {
@@ -26,11 +26,25 @@ type Participant struct {
 	game.Player
 }
 
+// Update is the only exported Method of Participant.
+func (p *Participant) Update() {
+	switch g, err := p.Referee.GetGame(); err {
+	case nil:
+		p.present(g)
+
+		if g.NextPlayer() == p.Player {
+			p.move()
+		}
+	case game.ErrPlayersMissing:
+		p.join()
+	default:
+		log.Fatal(err)
+	}
+}
+
 // join asks the Referee to join the Game.
 func (p *Participant) join() {
-	err := p.PushPlayer(p.Player)
-
-	switch err {
+	switch err := p.Referee.PushPlayer(p.Player); err {
 	case nil:
 		// Do nothing.
 	case actors.ErrGameFull:
@@ -46,9 +60,7 @@ func (p *Participant) join() {
 func (p *Participant) move() {
 	x, y := p.PopCoordinates()
 
-	err := p.PushMove(game.Move{p.Player, x, y})
-
-	switch err {
+	switch err := p.Referee.PushMove(game.Move{p.Player, x, y}); err {
 	case nil:
 		// Do nothing.
 	case game.ErrIllegalMove:
@@ -56,4 +68,9 @@ func (p *Participant) move() {
 	default:
 		log.Fatal(err)
 	}
+}
+
+// present pushes a given Game to the Client for display.
+func (p *Participant) present(g game.Game) {
+	p.Client.SetGame(g)
 }

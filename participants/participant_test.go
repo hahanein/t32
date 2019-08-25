@@ -1,6 +1,7 @@
 package participants
 
 import (
+	"reflect"
 	"t32/game"
 	"testing"
 )
@@ -13,12 +14,14 @@ func TestJoin(t *testing.T) {
 		Referee: r,
 	}
 
-	before := r.Players
+	want := r.Players
 
 	p.join()
 
-	if len(before) == len(r.Players) {
-		t.Fatal("failed to join:", r.Players)
+	have := r.Players
+
+	if reflect.DeepEqual(want, have) {
+		t.Fatalf("failed to join: wanted %+v have %+v", want, have)
 	}
 }
 
@@ -46,7 +49,32 @@ func TestMove(t *testing.T) {
 	have := r.History[0]
 	want := game.Move{p.Player, coords.X, coords.Y}
 
-	if want.Player != have.Player || want.X != have.X || want.Y != have.Y {
+	if !reflect.DeepEqual(want, have) {
 		t.Fatalf("corrupted Move: wanted %+v have %+v", want, have)
+	}
+}
+
+func TestPresent(t *testing.T) {
+	want := game.Game{
+		3,
+		game.Players{'A', 'B', 'C'},
+		game.History{game.Move{'A', 1, 2}},
+	}
+
+	r := new(spyReferee)
+	c := new(spyClient)
+
+	p := &Participant{
+		Player:  'A',
+		Referee: r,
+		Client:  c,
+	}
+
+	p.present(want)
+
+	have := c.Game
+
+	if !reflect.DeepEqual(want, have) {
+		t.Fatalf("corrupted Game: wanted %+v have %+v", want, have)
 	}
 }
