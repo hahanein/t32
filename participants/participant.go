@@ -1,5 +1,14 @@
 package participants
 
+// This file contains the Participant data structure. It represents a human or
+// a computer that is a potential Player in Game. The following principles must
+// be considered when editing this data structure and its methods:
+//
+// (1) When a Referee method returns an error you may safely assume that the
+// game state has not changed AS A RESULT of you calling that method.
+// (2) However, you MUST NEVER assume that the last Game state you know of is
+// still the most recent state.
+
 import (
 	"log"
 	"t32/actors"
@@ -25,7 +34,9 @@ func (p *Participant) join() {
 	case nil:
 		// Do nothing.
 	case actors.ErrGameFull:
+		// Do nothing.
 	case actors.ErrPlayerTaken:
+		// Do nothing.
 	default:
 		log.Fatal(err)
 	}
