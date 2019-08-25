@@ -1,4 +1,4 @@
-package actors
+package participants
 
 type spyCoordinates struct {
 	X, Y int

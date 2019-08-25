@@ -1,4 +1,4 @@
-package actors
+package participants
 
 import (
 	"log"
