@@ -1,12 +1,14 @@
 package participants
 
+import "t32/game"
+
 type spyCoordinates struct {
 	X, Y int
 }
 
 type spyClient struct {
 	Coordinates []spyCoordinates
-	Err         error
+	game.Game
 }
 
 func (c *spyClient) PopCoordinates() (int, int) {
@@ -22,6 +24,6 @@ func (c *spyClient) PopCoordinates() (int, int) {
 	return co.X, co.Y
 }
 
-func (c *spyClient) Fatal(err error) {
-	c.Err = err
+func (c *spyClient) SetGame(g game.Game) {
+	c.Game = g
 }
