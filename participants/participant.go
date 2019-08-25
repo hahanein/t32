@@ -52,7 +52,7 @@ func (p *Participant) move() {
 	case nil:
 		// Do nothing.
 	case game.ErrIllegalMove:
-		p.move()
+		// Do nothing.
 	default:
 		log.Fatal(err)
 	}
