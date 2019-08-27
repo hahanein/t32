@@ -14,3 +14,13 @@ func TestPushPlayer(t *testing.T) {
 		t.Fatal("failed to add Player to Players list")
 	}
 }
+
+func TestPushMove(t *testing.T) {
+	g := Game{3, Players{'A', 'B', 'C'}, History{}}
+	m := Move{'A', 1, 2}
+
+	err := g.PushMove(m)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

@@ -19,11 +19,11 @@ func (s Size) doesSquareExist(x, y int) bool {
 	return (x >= 0 && x < int(s)) && (y >= 0 && y < int(s))
 }
 
-// Validate returns an error if Size s is illegal. Otherwise it returns nil.
-func (s Size) Validate() error {
+// IsLegal returns false if Size s is illegal. Otherwise it returns true.
+func (s Size) IsLegal() bool {
 	if s < MinSize || s > MaxSize {
-		return ErrIllegalSize
+		return false
 	}
 
-	return nil
+	return true
 }

@@ -9,7 +9,7 @@ const (
 )
 
 var (
-	ErrIllegalMove = errors.New("game: illegal move")
+	ErrSizeIllegal = errors.New("size illegal")
 )
 
 // Move represents a Player's intended action. It contains their Player as well
@@ -22,83 +22,49 @@ type Move struct {
 // Game is the complete set of data necessary to derive all necessary
 // informations about a given Game from.
 type Game struct {
-	Size
-	Players
-	History
+	size    Size
+	players Players
+	history History
 }
 
-// Make either returns a GUARANTEED LEGAL Tic Tac Toe 2.0 game state or an
-// error.
-func Make(s Size, ps Players, ms ...Move) (Game, error) {
-	g := Game{s, ps, ms}
+// New returns a new Game.
+func New(s Size) (*Game, error) {
+	g := &Game{size: s}
 
-	err := Validate(g)
-	if err != nil {
-		return g, err
+	ok := s.IsLegal()
+	if !ok {
+		return g, ErrSizeIllegal
 	}
 
 	return g, nil
 }
 
-// Validate determines a game's legality with regards to the Tic Tac Toe 2.0
-// specifications and returns an error if they've been broken.
-func Validate(g Game) error {
-	err := g.Size.Validate()
-	if err != nil {
-		return err
-	}
-
-	err = g.Players.Validate()
-	if err != nil {
-		return err
-	}
-
-	for i, m := range g.History {
-		ok := g.History[:i].isSquareEmpty(m.X, m.Y)
-		if !ok {
-			return ErrIllegalMove
-		}
-
-		ok = g.Size.doesSquareExist(m.X, m.Y)
-		if !ok {
-			return ErrIllegalMove
-		}
-
-		ok = g.History[:i].isValidPlayerSequence(g.Players)
-		if !ok {
-			return ErrIllegalMove
-		}
-	}
-
-	return nil
-}
-
 // Board derives a Board from the current Game. If Move coordinates in the
 // History have duplicates or are out of bounds it returns an error.
-func (g Game) Board() Board {
-	b := make(Board, g.Size)
+func (g *Game) Board() Board {
+	b := make(Board, g.size)
 	for x, _ := range b {
-		b[x] = make([]Player, g.Size)
+		b[x] = make([]Player, g.size)
 	}
 
-	for _, m := range g.History {
+	for _, m := range g.history {
 		b[m.X][m.Y] = m.Player
 	}
 
 	return b
 }
 
-// NextPlayer derives the Player currently waiting in Line.
-func (g Game) NextPlayer() Player {
-	if len(g.History) == 0 && len(g.Players) > 0 {
-		return g.Players[0]
-	} else if len(g.History) == 0 {
-		// TODO: Maybe we should just Panic since at this point
-		// everything must've went wrong.
-		return NoPlayer
+// WhoIsNext derives the Player currently waiting in Line.
+func (g *Game) WhoIsNext() (Player, error) {
+	if len(g.players) < RequiredNumberOfPlayers {
+		return NoPlayer, ErrGameNotStarted
 	}
 
-	i := len(g.History) % len(g.Players)
+	if len(g.history) == 0 {
+		return g.players[0], nil
+	}
 
-	return g.Players[i]
+	i := len(g.history) % len(g.players)
+
+	return g.players[i], nil
 }

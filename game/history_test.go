@@ -3,17 +3,17 @@ package game
 import "testing"
 
 func TestIsSquareEmpty(t *testing.T) {
-	g, _ := Make(MinSize, Players{'A', 'B', 'C'})
+	h := History{}
 	x, y := 0, 0
 
-	ok := g.isSquareEmpty(x, y)
+	ok := h.isSquareEmpty(x, y)
 	if !ok {
 		t.Fatalf("false positive: square %d,%d should be empty", x, y)
 	}
 
-	g.History = append(g.History, Move{'A', x, y})
+	h = append(h, Move{'A', x, y})
 
-	ok = g.isSquareEmpty(x, y)
+	ok = h.isSquareEmpty(x, y)
 	if ok {
 		t.Fatalf("false negative: square %d,%d should be occupied", x, y)
 	}
