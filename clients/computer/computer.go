@@ -1,45 +1,61 @@
 package computer
 
 import (
-	"math/rand"
-	"reflect"
+	"context"
+	"log"
 	"t32/game"
-	"time"
 )
 
+type Algorithm func(game.Board, game.Player) (int, int)
+
 type Computer struct {
-	game.Game
+	Algorithm
 }
 
-func (c *Computer) PopCoordinates() (int, int) {
-	// Pretend to think hard...
-	time.Sleep(time.Duration(rand.Int63n(8)) * time.Second)
+// New returns a new Computer client.
+func New(a Algorithm) *Computer {
+	c := new(Computer)
 
-	numberOfPossibleMoves := (int(c.Size) * int(c.Size)) - len(c.History)
+	c.Algorithm = a
 
-	countdown := rand.Intn(numberOfPossibleMoves)
-
-	b := c.Board()
-
-	for x, _ := range b {
-		for y, _ := range b[x] {
-			if b[x][y] == game.NoPlayer && countdown == 0 {
-				return x, y
-			} else if b[x][y] == game.NoPlayer {
-				countdown--
-			}
-		}
-	}
-
-	return -1, -1
+	return c
 }
 
-func (c *Computer) SetGame(g game.Game) {
-	if reflect.DeepEqual(c.Game, g) {
-		return
-	}
+// WaitingForOthers is called when there need to be more Players before the
+// Game may start.
+func (c *Computer) WaitingForOthers(ctx context.Context) {
+	log.Println("called WaitingForOthers")
+}
 
-	c.Game = g
+// ItsAnothersTurn is called when it is another Player's turn.
+func (c *Computer) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Player) {
+	log.Println("called ItsAnothersTurn with args:", b, p)
+}
 
-	// TODO
+// ItsYourTurn is called when it is your turn. You will be prompted to input
+// coordinates.
+func (c *Computer) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) (int, int) {
+	log.Println("called ItsYourTurn with args:", b, p)
+
+	x, y := c.Algorithm(b, p)
+
+	log.Println("returning coordinates:", x, y)
+
+	return x, y
+}
+
+// Stalemate is called when there are no more possible Moves but there's also
+// no winner.
+func (c *Computer) Stalemate(ctx context.Context, b game.Board) {
+	log.Println("called Stalemate with args:", b)
+}
+
+// YouWon is called when you won the Game.
+func (c *Computer) YouWon(ctx context.Context, b game.Board, p game.Player) {
+	log.Println("called YouWon with args:", b, p)
+}
+
+// AnotherWon is called when another Player won the Game.
+func (c *Computer) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
+	log.Println("called AnotherWon with args:", b, p)
 }
