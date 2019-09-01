@@ -9,11 +9,15 @@ var (
 	ErrGameNotStarted = errors.New("game not started")
 	ErrGameStarted    = errors.New("game started")
 
-	ErrMoveIllegal = errors.New("move illegal")
+	ErrMoveNotYourTurn        = errors.New("it is not your turn")
+	ErrMoveSquareNotEmpty     = errors.New("square is not empty")
+	ErrMoveSquareDoesNotExist = errors.New("square does not exist")
 )
 
 // PushPlayer returns a Game with a given Player added. It returns an error if
 // the Player must not be added.
+//
+// Attention: This method mutates its receiver!
 func (g *Game) PushPlayer(p Player) error {
 	ps, err := g.players.PushPlayer(p)
 	if err != nil {
@@ -48,6 +52,8 @@ func (ps Players) PushPlayer(p Player) (Players, error) {
 
 // PushMove adds a Move to the History. It returns an error if it is illegal or
 // if we are still waiting for other Players to join.
+//
+// Attention: This method mutates its receiver!
 func (g *Game) PushMove(m Move) error {
 	p, err := g.WhoIsNext()
 	if err != nil {
@@ -55,17 +61,17 @@ func (g *Game) PushMove(m Move) error {
 	}
 
 	if p != m.Player {
-		return ErrMoveIllegal
+		return ErrMoveNotYourTurn
 	}
 
 	ok := g.history.isSquareEmpty(m.X, m.Y)
 	if !ok {
-		return ErrMoveIllegal
+		return ErrMoveSquareNotEmpty
 	}
 
 	ok = g.size.doesSquareExist(m.X, m.Y)
 	if !ok {
-		return ErrMoveIllegal
+		return ErrMoveSquareNotExist
 	}
 
 	g.history = append(g.history, m)

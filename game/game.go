@@ -1,3 +1,5 @@
+// game contains data structures and functions which encapsulate the complete
+// set of rules of "Tic Tac Toe 2.0".
 package game
 
 import (
