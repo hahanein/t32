@@ -1,4 +1,2 @@
 Function which creates a valid list of players (unique, complete, printable, different from NoPlayer)
-Function which checks if a game has finished
-Function which tries to determine a winner
-Tell, don't ask: Basically, the culprit of the complexity here is x.Validate() and its helper methods. Instead what you want is mapping functions. E.g. instead of asking if there is enough space for another player just do this: Game -> Player -> Maybe Game
+Check for illegal player runes in configuration file
