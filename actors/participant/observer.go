@@ -1,4 +1,4 @@
-package participants
+package participant
 
 import (
 	"sync"

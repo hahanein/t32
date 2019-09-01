@@ -12,10 +12,12 @@ type Referee struct {
 	observer.Subject
 
 	game.Game
+
+	Done chan struct{}
 }
 
-// NewReferee returns a new Referee.
-func NewReferee(g game.Game) *Referee {
+// New returns a new Referee.
+func New(g game.Game) *Referee {
 	r := new(Referee)
 
 	r.Subject = new(Subject)
@@ -31,7 +33,7 @@ func (r *Referee) PushMove(m game.Move) error {
 	r.Lock()
 	defer r.Unlock()
 
-	err := r.game.PushMove(m)
+	err := r.Game.PushMove(m)
 	if err != nil {
 		return err
 	}
@@ -45,21 +47,21 @@ func (r *Referee) WhoIsNext() (game.Player, error) {
 	r.RLock()
 	defer r.RUnlock()
 
-	return r.game.WhoIsNext()
+	return r.Game.WhoIsNext()
 }
 
 func (r *Referee) Finish() (game.Player, bool) {
 	r.RLock()
 	defer r.RUnlock()
 
-	return r.game.Finish()
+	return r.Game.Finish()
 }
 
 func (r *Referee) Board() game.Board {
 	r.RLock()
 	defer r.RUnlock()
 
-	return r.game.Board()
+	return r.Game.Board()
 }
 
 // PushPlayer adds a Player to the list of players and notifies all observers
@@ -69,7 +71,7 @@ func (r *Referee) PushPlayer(p game.Player) error {
 	r.Lock()
 	defer r.Unlock()
 
-	switch err := r.game.PushPlayer(p); err {
+	switch err := r.Game.PushPlayer(p); err {
 	case nil:
 		r.Notify()
 	case game.ErrGameStarted:

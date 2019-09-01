@@ -1,4 +1,4 @@
-package participants
+package participant
 
 import "t32/game"
 
@@ -8,7 +8,7 @@ type spyCoordinates struct {
 
 type spyClient struct {
 	Coordinates []spyCoordinates
-	game.Game
+	game.Board
 }
 
 func (c *spyClient) PopCoordinates() (int, int) {
@@ -24,6 +24,6 @@ func (c *spyClient) PopCoordinates() (int, int) {
 	return co.X, co.Y
 }
 
-func (c *spyClient) SetGame(g game.Game) {
-	c.Game = g
+func (c *spyClient) SetBoard(b game.Board) {
+	c.Board = b
 }

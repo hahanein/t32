@@ -13,7 +13,7 @@ func TestPushMove(t *testing.T) {
 	g.PushPlayer('Y')
 	g.PushPlayer('Z')
 
-	r := &Referee{Subject: s, game: g}
+	r := &Referee{Subject: s, Game: *g}
 	m := game.Move{'X', 1, 2}
 
 	err := r.PushMove(m)
