@@ -1,4 +1,4 @@
-package actors
+package referee
 
 import (
 	"log"
@@ -7,20 +7,21 @@ import (
 	"t32/observer"
 )
 
-type Game interface {
-	PushPlayer(game.Player) error
-	PushMove(game.Move) error
-
-	WhoIsNext() (game.Player, error)
-	Board() game.Board
-	Finish() (game.Player, bool)
-}
-
 type Referee struct {
 	sync.RWMutex
 	observer.Subject
 
-	game Game
+	game.Game
+}
+
+// NewReferee returns a new Referee.
+func NewReferee(g game.Game) *Referee {
+	r := new(Referee)
+
+	r.Subject = new(Subject)
+	r.Game = g
+
+	return r
 }
 
 // PushMove attempts to add a Move to the Game's History. On success it

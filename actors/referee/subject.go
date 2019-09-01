@@ -1,4 +1,4 @@
-package actors
+package referee
 
 import (
 	"sync"
