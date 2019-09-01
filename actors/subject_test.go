@@ -1,4 +1,4 @@
-package referee
+package actors
 
 import (
 	"testing"
@@ -20,7 +20,7 @@ func TestAttach(t *testing.T) {
 }
 
 // TestNotify will raise a fatal error if the done channel blocks due to
-// Subject's Notify() failing to call its Observers' Update() methods.
+// Subject's notify() failing to call its Observers' Update() methods.
 func TestNotify(t *testing.T) {
 	done := make(chan struct{})
 

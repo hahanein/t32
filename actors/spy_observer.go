@@ -1,4 +1,4 @@
-package referee
+package actors
 
 type SpyObserver struct {
 	ch chan struct{}

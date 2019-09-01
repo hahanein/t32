@@ -1,8 +1,8 @@
-package referee
+package actors
 
 import (
 	"sync"
-	"t32/actors"
+	"t32/observer"
 )
 
 // Subject implements the subject interface of the observer pattern. It is
@@ -11,11 +11,11 @@ import (
 type Subject struct {
 	sync.Mutex
 
-	Observers []actors.Observer
+	Observers []observer.Observer
 }
 
 // Attach appends an Observer to the Subject's registry.
-func (s *Subject) Attach(o actors.Observer) {
+func (s *Subject) Attach(o observer.Observer) {
 	s.Lock()
 	defer s.Unlock()
 
