@@ -1,9 +1,53 @@
 t32 - tic tac toe 2.0                                          Benjamin Westphal
 
 
-                                    Packages
+                                     BUILD
 
-t32/game:
-        This package contains data structures and pure functions which
-        encapsulate the most general and high-level rules of the program.
-        
+Download and install Go[1] and build the binary with the following command:
+
+        $ go build ./cmd/
+
+
+                                  ARCHITECTURE
+
+This program is made up of several layers:
+
+                      ,__________________________________,
+                      | DRIVERS AND FRAMEWORKS           |
+                      | ======================           |
+                      |                                  |
+                      | - t32/ai                         |
+                      | ,______________________________, |
+                      | | INTERFACE ADAPTERS           | |
+                      | | ==================           | |
+                      | |                              | |
+                      | | - t32/clients/computer       | |
+                      | | - t32/clients/console        | |
+                      | | ,__________________________, | |
+                      | | | USE CASES                | | |
+                      | | | =========                | | |
+                      | | |                          | | |
+                      | | | - t32/actors/referee     | | |
+                      | | | - t32/actors/participant | | |
+                      | | |      ,____________,      | | |
+                      | | |      | ENTITIES   |      | | |
+                      | | |      | ========   |      | | |
+                      | | |      |            |      | | |
+                      | | |      | - t32/game |      | | |
+                      | | |      '------------'      | | |
+                      | | '--------------------------' | |
+                      | '------------------------------' |
+                      '----------------------------------' 
+
+The outer circles are mechanisms. The inner circles are policies. Source code
+dependencies may only point inwards. This produces:
+
+        - independence of any external agency such as a framework, user
+          interface or database
+        - testability
+
+Entities ecanpsulate core business rules. Use cases contain application
+specific business rules.
+
+
+[1]: https://golang.org/dl/
