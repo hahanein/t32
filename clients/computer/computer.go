@@ -24,12 +24,12 @@ func New(a Algorithm) *Computer {
 // WaitingForOthers is called when there need to be more Players before the
 // Game may start.
 func (c *Computer) WaitingForOthers(ctx context.Context) {
-	log.Println("called WaitingForOthers")
+	// Do nothing.
 }
 
 // ItsAnothersTurn is called when it is another Player's turn.
 func (c *Computer) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Player) {
-	log.Println("called ItsAnothersTurn with args:", b, p)
+	// Do nothing.
 }
 
 // ItsYourTurn is called when it is your turn. You will be prompted to input
@@ -39,23 +39,21 @@ func (c *Computer) ItsYourTurn(ctx context.Context, b game.Board, p game.Player)
 
 	x, y := c.Algorithm(b, p)
 
-	log.Println("returning coordinates:", x, y)
-
 	return x, y
 }
 
 // Stalemate is called when there are no more possible Moves but there's also
 // no winner.
 func (c *Computer) Stalemate(ctx context.Context, b game.Board) {
-	log.Println("called Stalemate with args:", b)
+	// Do nothing.
 }
 
 // YouWon is called when you won the Game.
 func (c *Computer) YouWon(ctx context.Context, b game.Board, p game.Player) {
-	log.Println("called YouWon with args:", b, p)
+	// Do nothing.
 }
 
 // AnotherWon is called when another Player won the Game.
 func (c *Computer) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
-	log.Println("called AnotherWon with args:", b, p)
+	// Do nothing.
 }
