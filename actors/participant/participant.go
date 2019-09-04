@@ -3,6 +3,7 @@ package participant
 import (
 	"context"
 	"log"
+	"sync"
 	"t32/game"
 	"t32/observer"
 )
@@ -14,6 +15,7 @@ type Client interface {
 	Stalemate(context.Context, game.Board)
 	AnotherWon(context.Context, game.Board, game.Player)
 	YouWon(context.Context, game.Board, game.Player)
+	Flash(context.Context, game.Board, string)
 }
 
 type Referee interface {
@@ -27,6 +29,7 @@ type Referee interface {
 }
 
 type Participant struct {
+	sync.Mutex
 	Referee
 	Client
 	game.Player
@@ -52,6 +55,8 @@ func New(player game.Player, c Client, r Referee) *Participant {
 // Update is the only exported Method of Participant. It encapsulates the
 // complete set of a Participant's reactions to a change of state.
 func (p *Participant) Update() {
+	p.Lock()
+
 	ctx, _ := context.WithCancel(context.Background())
 
 	winner, ok := p.Referee.Finish()
@@ -86,7 +91,10 @@ func (p *Participant) Update() {
 				case game.ErrMoveSquareNotEmpty:
 					fallthrough
 				case game.ErrMoveSquareDoesNotExist:
+					p.Unlock()
+					p.Flash(ctx, b, err.Error())
 					p.Update()
+					return
 				default:
 					log.Fatal(err)
 				}
@@ -107,4 +115,6 @@ func (p *Participant) Update() {
 			log.Fatal(err)
 		}
 	}
+
+	p.Unlock()
 }

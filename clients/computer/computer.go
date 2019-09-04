@@ -2,7 +2,6 @@ package computer
 
 import (
 	"context"
-	"log"
 	"t32/game"
 )
 
@@ -35,8 +34,6 @@ func (c *Computer) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Pla
 // ItsYourTurn is called when it is your turn. You will be prompted to input
 // coordinates.
 func (c *Computer) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) (int, int) {
-	log.Println("called ItsYourTurn with args:", b, p)
-
 	x, y := c.Algorithm(b, p)
 
 	return x, y
@@ -56,4 +53,9 @@ func (c *Computer) YouWon(ctx context.Context, b game.Board, p game.Player) {
 // AnotherWon is called when another Player won the Game.
 func (c *Computer) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
 	// Do nothing.
+}
+
+// Flash is called when a message is incoming.
+func (c *Computer) Flash(ctx context.Context, b game.Board, msg string) {
+	// Do nothing
 }

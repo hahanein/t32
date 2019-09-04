@@ -7,6 +7,7 @@ import (
 	"io"
 	"sync"
 	"t32/game"
+	"time"
 )
 
 type Templates interface {
@@ -16,6 +17,7 @@ type Templates interface {
 	Stalemate(game.Board) string
 	AnotherWon(game.Board, game.Player) string
 	YouWon(game.Board, game.Player) string
+	Flash(game.Board, string) string
 }
 
 // Console implements the participant.Client interface. It is responsible
@@ -70,6 +72,8 @@ func (c *Console) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) 
 
 		x, y, err := Parse(userInput)
 		if err != nil {
+			c.Write([]byte(c.Templates.Flash(b, err.Error())))
+			time.Sleep(1 * time.Second)
 			continue
 		}
 
@@ -97,4 +101,12 @@ func (c *Console) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.AnotherWon(b, p)))
+}
+
+// Flash is called when a message is incoming.
+func (c *Console) Flash(ctx context.Context, b game.Board, msg string) {
+	c.Lock()
+	defer c.Unlock()
+	c.Write([]byte(c.Templates.Flash(b, msg)))
+	time.Sleep(1 * time.Second)
 }

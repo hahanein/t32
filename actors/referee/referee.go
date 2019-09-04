@@ -23,6 +23,8 @@ func New(g game.Game) *Referee {
 	r.Subject = new(Subject)
 	r.Game = g
 
+	log.Println("start")
+
 	return r
 }
 

@@ -89,3 +89,10 @@ func Board(board game.Board) string {
 
 	return b.String()
 }
+
+// Flash returns the current Board accompanied by a flash message.
+func (t *Templates) Flash(b game.Board, msg string) string {
+	return "Message: " + msg +
+		Divider +
+		Board(b)
+}
