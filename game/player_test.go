@@ -14,12 +14,7 @@ func TestWhosNext(t *testing.T) {
 		},
 	}
 
-	p, err := g.WhoIsNext()
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if p != 'B' {
+	if p := g.WhoIsNext(); p != 'B' {
 		t.Fatalf("false player: wanted B have %c", p)
 	}
 }

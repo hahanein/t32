@@ -22,7 +22,7 @@ func TestGenerate(t *testing.T) {
 
 	wantedX, wantedY := 2, 1
 
-	p, _ := g.WhoIsNext()
+	p := g.WhoIsNext()
 
 	haveX, haveY := Random(g.Board(), p)
 

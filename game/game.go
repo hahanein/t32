@@ -57,16 +57,16 @@ func (g *Game) Board() Board {
 }
 
 // WhoIsNext derives the Player currently waiting in Line.
-func (g *Game) WhoIsNext() (Player, error) {
+func (g *Game) WhoIsNext() Player {
 	if len(g.players) < RequiredNumberOfPlayers {
-		return NoPlayer, ErrGameNotStarted
+		return NoPlayer
 	}
 
 	if len(g.history) == 0 {
-		return g.players[0], nil
+		return g.players[0]
 	}
 
 	i := len(g.history) % len(g.players)
 
-	return g.players[i], nil
+	return g.players[i]
 }

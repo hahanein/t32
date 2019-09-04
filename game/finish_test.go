@@ -27,29 +27,23 @@ func TestStalemate(t *testing.T) {
 	}
 }
 
-func TestFinishRow(t *testing.T) {
-	wonRow := Row{1, 1, 1, 1}
+func TestWinnerRow(t *testing.T) {
+	wonRow := Row{'X', 'X', 'X', 'X'}
 
-	p, ok := wonRow.finish()
-	if !ok {
-		t.Fatal("should return true since Row is occupied only by a single Player")
-	}
-	if p != 1 {
-		t.Fatalf("wrong winner: wanted 1 have %c", p)
+	p := wonRow.winner()
+	if p != 'X' {
+		t.Fatal("should return X since Row is occupied by that player only")
 	}
 
 	lostRows := []Row{
 		Row{NoPlayer, NoPlayer, NoPlayer},
-		Row{1, 2, 3},
+		Row{'A', 'B', 'C'},
 	}
 
 	for _, r := range lostRows {
-		p, ok := r.finish()
-		if ok {
-			t.Fatal("should return false since Row is not occupied only by a single Player")
-		}
+		p := r.winner()
 		if p != NoPlayer {
-			t.Fatalf("wrong winner: wanted %c have %c", NoPlayer, p)
+			t.Fatal("should not return a winner. returned:", p)
 		}
 	}
 }
@@ -102,7 +96,7 @@ func TestDiagonal(t *testing.T) {
 	}
 }
 
-func TestFinish(t *testing.T) {
+func TestWinner(t *testing.T) {
 	won := Game{
 		size:    3,
 		players: Players{'A', 'B', 'C'},
@@ -117,12 +111,11 @@ func TestFinish(t *testing.T) {
 		},
 	}
 
-	p, ok := won.Finish()
-	if !ok {
+	if won.Status() != StatusFinish {
 		t.Fatal("incorrect game state. A won.")
 	}
 
-	if p != 'A' {
+	if p := won.Winner(); p != 'A' {
 		t.Fatalf("incorrect winner. wanted A have %c", p)
 	}
 }

@@ -45,18 +45,25 @@ func (r *Referee) PushMove(m game.Move) error {
 	return nil
 }
 
-func (r *Referee) WhoIsNext() (game.Player, error) {
+func (r *Referee) WhoIsNext() game.Player {
 	r.RLock()
 	defer r.RUnlock()
 
 	return r.Game.WhoIsNext()
 }
 
-func (r *Referee) Finish() (game.Player, bool) {
+func (r *Referee) Status() game.Status {
 	r.RLock()
 	defer r.RUnlock()
 
-	return r.Game.Finish()
+	return r.Game.Status()
+}
+
+func (r *Referee) Winner() game.Player {
+	r.RLock()
+	defer r.RUnlock()
+
+	return r.Game.Winner()
 }
 
 func (r *Referee) Board() game.Board {

@@ -2,36 +2,36 @@ package game
 
 type Row []Player
 
-// Finish returns the winning Player if there is one and true if the Game has
-// ended. Otherwise it returns false.
-func (g *Game) Finish() (Player, bool) {
+// Winner returns the winning Player if there is one. Otherwise it returns
+// NoPlayer.
+func (g *Game) Winner() Player {
 	b := g.Board()
 
 	for _, r := range b {
-		p, ok := r.finish()
-		if ok {
-			return p, ok
+		p := r.winner()
+		if p != NoPlayer {
+			return p
 		}
 	}
 
 	for _, r := range b.rotate() {
-		p, ok := r.finish()
-		if ok {
-			return p, ok
+		p := r.winner()
+		if p != NoPlayer {
+			return p
 		}
 	}
 
-	p, ok := b.diagonal().finish()
-	if ok {
-		return p, ok
+	p := b.diagonal().winner()
+	if p != NoPlayer {
+		return p
 	}
 
-	p, ok = b.rotate().diagonal().finish()
-	if ok {
-		return p, ok
+	p = b.rotate().diagonal().winner()
+	if p != NoPlayer {
+		return p
 	}
 
-	return NoPlayer, g.stalemate()
+	return NoPlayer
 }
 
 // stalemate returns true if no more Moves are possible.
@@ -39,9 +39,9 @@ func (g *Game) stalemate() bool {
 	return int(g.size*g.size) == len(g.history)
 }
 
-// finish checks if a Row is occupied by only a single Player (other than
-// NoPlayer) and returns that Player and true. Otherwise it returns false.
-func (r Row) finish() (Player, bool) {
+// winner checks if a Row is occupied by only a single Player (other than
+// NoPlayer) and returns that Player otherwise it returns NoPlayer.
+func (r Row) winner() Player {
 	acc := make(map[Player]struct{})
 
 	for x, _ := range r {
@@ -49,9 +49,9 @@ func (r Row) finish() (Player, bool) {
 	}
 
 	if len(acc) == 1 {
-		return r[0], r[0] != NoPlayer
+		return r[0]
 	} else {
-		return NoPlayer, false
+		return NoPlayer
 	}
 }
 

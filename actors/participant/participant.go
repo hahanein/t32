@@ -22,8 +22,9 @@ type Referee interface {
 	observer.Subject
 
 	PushMove(m game.Move) error
-	WhoIsNext() (game.Player, error)
-	Finish() (game.Player, bool)
+	WhoIsNext() game.Player
+	Winner() game.Player
+	Status() game.Status
 	Board() game.Board
 	PushPlayer(p game.Player) error
 }
@@ -59,11 +60,11 @@ func (p *Participant) Update() {
 
 	ctx, _ := context.WithCancel(context.Background())
 
-	winner, ok := p.Referee.Finish()
-	if ok {
+	switch p.Referee.Status() {
+	case game.StatusFinish:
 		b := p.Referee.Board()
 
-		switch winner {
+		switch winner := p.Referee.Winner(); winner {
 		case game.NoPlayer:
 			p.Client.Stalemate(ctx, b)
 		case p.Player:
@@ -73,47 +74,48 @@ func (p *Participant) Update() {
 		}
 
 		p.Done <- struct{}{}
-	} else {
-		switch player, err := p.Referee.WhoIsNext(); err {
-		case nil:
-			b := p.Referee.Board()
 
-			if player == p.Player {
-				x, y := p.ItsYourTurn(ctx, b, player)
+	case game.StatusRunning:
+		b := p.Referee.Board()
 
-				m := game.Move{p.Player, x, y}
+		switch player := p.Referee.WhoIsNext(); player {
+		case p.Player:
+			x, y := p.ItsYourTurn(ctx, b, player)
 
-				switch err := p.Referee.PushMove(m); err {
-				case nil:
-				case game.ErrGameNotStarted:
-				case game.ErrMoveNotYourTurn:
-					fallthrough
-				case game.ErrMoveSquareNotEmpty:
-					fallthrough
-				case game.ErrMoveSquareDoesNotExist:
-					p.Unlock()
-					p.Flash(ctx, b, err.Error())
-					p.Update()
-					return
-				default:
-					log.Fatal(err)
-				}
-			} else {
-				p.Client.ItsAnothersTurn(ctx, b, player)
-			}
-		case game.ErrGameNotStarted:
-			p.Client.WaitingForOthers(ctx)
-			switch err := p.Referee.PushPlayer(p.Player); err {
+			m := game.Move{p.Player, x, y}
+
+			switch err := p.Referee.PushMove(m); err {
 			case nil:
-			case game.ErrGameStarted:
-			case game.ErrPlayerExists:
-			case game.ErrPlayerIllegal:
+			case game.ErrMoveNotYourTurn:
+				fallthrough
+			case game.ErrMoveSquareNotEmpty:
+				fallthrough
+			case game.ErrMoveSquareDoesNotExist:
+				p.Unlock()
+				p.Flash(ctx, b, err.Error())
+				p.Update()
+				return
 			default:
 				log.Fatal(err)
 			}
 		default:
+			p.Client.ItsAnothersTurn(ctx, b, player)
+		}
+
+	case game.StatusWaitingForPlayers:
+		p.Client.WaitingForOthers(ctx)
+
+		switch err := p.Referee.PushPlayer(p.Player); err {
+		case nil:
+		case game.ErrGameStarted:
+		case game.ErrPlayerExists:
+		case game.ErrPlayerIllegal:
+		default:
 			log.Fatal(err)
 		}
+
+	default:
+		log.Fatal("unknown game state")
 	}
 
 	p.Unlock()

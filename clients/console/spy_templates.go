@@ -29,3 +29,7 @@ func (t *spyTemplates) AnotherWon(b game.Board, p game.Player) string {
 func (t *spyTemplates) YouWon(b game.Board, p game.Player) string {
 	return t.Dummy
 }
+
+func (t *spyTemplates) Flash(b game.Board, msg string) string {
+	return t.Dummy
+}

@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 	"t32/game"
 	"testing"
 )
@@ -13,7 +14,7 @@ func TestDumbHandlers(t *testing.T) {
 	want := "OK"
 
 	w := new(bytes.Buffer)
-	c := &Console{&spyTemplates{want}, w, nil}
+	c := &Console{sync.Mutex{}, &spyTemplates{want}, w, nil}
 
 	epyB := game.Board{}
 	epyP := game.NoPlayer
@@ -63,7 +64,7 @@ func TestItsYourTurn(t *testing.T) {
 
 	w := new(bytes.Buffer)
 	r := strings.NewReader(fmt.Sprintf("%dx%d", wantX, wantY))
-	c := &Console{&spyTemplates{want}, w, r}
+	c := &Console{sync.Mutex{}, &spyTemplates{want}, w, r}
 
 	haveX, haveY := c.ItsYourTurn(context.Background(), epyB, epyP)
 

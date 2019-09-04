@@ -6,8 +6,8 @@ var (
 	ErrPlayerExists  = errors.New("player exists")
 	ErrPlayerIllegal = errors.New("player illegal")
 
-	ErrGameNotStarted = errors.New("game not started")
 	ErrGameStarted    = errors.New("game started")
+	ErrGameNotStarted = errors.New("game not started")
 
 	ErrMoveNotYourTurn        = errors.New("it is not your turn")
 	ErrMoveSquareNotEmpty     = errors.New("square is not empty")
@@ -34,12 +34,11 @@ func (g *Game) PushPlayer(p Player) error {
 //
 // Attention: This method mutates its receiver!
 func (g *Game) PushMove(m Move) error {
-	p, err := g.WhoIsNext()
-	if err != nil {
-		return err
+	if g.Status() != StatusRunning {
+		return ErrGameNotStarted
 	}
 
-	if p != m.Player {
+	if g.WhoIsNext() != m.Player {
 		return ErrMoveNotYourTurn
 	}
 
