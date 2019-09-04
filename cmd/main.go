@@ -25,13 +25,6 @@ var (
 func init() {
 	flag.StringVar(&pathToConfig, "config", "config.json", "path to config")
 	flag.BoolVar(&displayVersion, "version", false, "display version and stop execution")
-
-	// // Log to syslog instead of printing to stdout.
-	// w, err := syslog.New(syslog.LOG_ERR, "t32")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// log.SetOutput(w)
 }
 
 func main() {
