@@ -1,6 +1,9 @@
 package game
 
-import "errors"
+import (
+	"errors"
+	"unicode"
+)
 
 var (
 	ErrPlayerExists  = errors.New("player exists")
@@ -71,7 +74,7 @@ func (ps Players) PushPlayer(p Player) (Players, error) {
 		}
 	}
 
-	if p == NoPlayer {
+	if p == NoPlayer || !unicode.IsPrint(rune(p)) {
 		return ps, ErrPlayerIllegal
 	}
 
