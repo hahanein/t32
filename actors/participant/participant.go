@@ -28,6 +28,9 @@ type Referee interface {
 	PushPlayer(p game.Player) error
 }
 
+// Participant is a potential Player in the Game but it might just be a
+// spectator, too. Since every Observer will receive updates irrespective of
+// their success in creating a Player in the Game.
 type Participant struct {
 	sync.Mutex
 	Referee
@@ -83,6 +86,7 @@ func (p *Participant) Update() {
 
 			switch err := p.Referee.PushMove(m); err {
 			case nil:
+				// Do nothing.
 			case game.ErrMoveNotYourTurn:
 				fallthrough
 			case game.ErrMoveSquareNotEmpty:
@@ -104,9 +108,13 @@ func (p *Participant) Update() {
 
 		switch err := p.Referee.PushPlayer(p.Player); err {
 		case nil:
+			// Do nothing.
 		case game.ErrGameStarted:
+			// Do nothing.
 		case game.ErrPlayerExists:
+			// Do nothing.
 		case game.ErrPlayerIllegal:
+			// Do nothing.
 		default:
 			log.Fatal(err)
 		}

@@ -1,3 +1,6 @@
+// referee contains data structures and methods for the management of a Game
+// and pushing notifications about changes in its state.
+
 package referee
 
 import (
@@ -7,6 +10,7 @@ import (
 	"t32/observer"
 )
 
+// Referee manages the Game and notifies observers of state changes.
 type Referee struct {
 	sync.RWMutex
 	observer.Subject

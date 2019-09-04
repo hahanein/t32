@@ -1,11 +1,17 @@
+// computer contains data structures and methods to run an automated headless client.
+
 package computer
 
 import (
 	"t32/game"
 )
 
+// Algorithm is the type of function that may be used to drive the Computer
+// Client.
 type Algorithm func(game.Board, game.Player) (int, int)
 
+// Computer implements the Client interface. It designed to automatically
+// generate inputs and run in headless mode.
 type Computer struct {
 	Algorithm
 }
