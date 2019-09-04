@@ -41,25 +41,33 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Create a new Game.
 	g, err := game.New(cfg.Size)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// Pass that Game to a new Referee.
 	r := referee.New(*g)
 
+	// Create a multiplayer console client.
 	cConsole := console.New(
-		new(templates.Templates),
+		templates.New(),
 		new(console.Output),
 		os.Stdin,
 	)
 
+	// Create an automated computer client.
 	cComputer := computer.New(ai.Random)
 
+	// Create the participants and automatically register them with the
+	// Referee. They will immediately begin interacting with the Game.
 	p1 := participant.New(cfg.Player1, cConsole, r)
 	p2 := participant.New(cfg.Player2, cConsole, r)
 	p3 := participant.New(cfg.Player3, cComputer, r)
 
+	// Block until all Participants declared them being done by having send
+	// an empty struct through the Done channel.
 	<-p1.Done
 	<-p2.Done
 	<-p3.Done

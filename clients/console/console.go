@@ -1,4 +1,6 @@
-// console provides data structures and functions
+// console provides data structures and functions that serve as a bridge
+// between a single console user interface and multiple Participants.
+
 package console
 
 import (
@@ -29,6 +31,7 @@ type Console struct {
 	io.Reader
 }
 
+// New returns a new Console Client.
 func New(t Templates, w io.Writer, r io.Reader) *Console {
 	c := new(Console)
 
@@ -102,7 +105,8 @@ func (c *Console) AnotherWon(b game.Board, p game.Player) {
 	c.Write([]byte(c.Templates.AnotherWon(b, p)))
 }
 
-// Flash is called when a message is incoming.
+// Flash is called when a message is incoming. It prints a message that may be
+// cleared after a second.
 func (c *Console) Flash(b game.Board, msg string) {
 	c.Lock()
 	defer c.Unlock()

@@ -11,7 +11,7 @@ import (
 func Parse(s string) (int, int, error) {
 	i := strings.IndexRune(s, 'x')
 	if i == -1 {
-		return -1, -1, errors.New("invalid input format: must be NxN where N is an integer")
+		return -1, -1, errors.New("invalid format: must be NxN where N is a natural number")
 	}
 
 	sX, sY := s[:i], s[i+1:]
