@@ -1,3 +1,5 @@
+// templates contains methods for the plaintext presentation of Game state.
+
 package templates
 
 import (
@@ -6,62 +8,76 @@ import (
 	"t32/game"
 )
 
-const (
-	WaitingForOthers = "Waiting for others."
-	ItsNobodiesTurn  = "It's nobodies turn?!"
-	Stalemate        = "Stalemate..."
+type Templates struct {
+	waitingForOthers string
+	stalemate        string
 
-	Prompt  = "Enter: "
-	Divider = "\n\n"
+	message string
+	prompt  string
+	divider string
 
-	// Hungarian "Fmt" prefix for strings which need to be processed with
+	// Hungarian "fmt" prefix for strings which need to be processed with
 	// fmt.Sprintf first.
-	FmtItsAnothersTurn = "It's %c's turn."
-	FmtItsYourTurn     = "It's your turn, %c!"
-	FmtYouWon          = "You won, %c!"
-	FmtAnotherWon      = "%c won."
-)
+	fmtItsAnothersTurn string
+	fmtItsYourTurn     string
+	fmtYouWon          string
+	fmtAnotherWon      string
+}
 
-type Templates struct{}
+func New() *Templates {
+	return &Templates{
+		waitingForOthers: "Waiting for others.",
+		stalemate:        "Stalemate...",
+
+		message: "Message: ",
+		prompt:  "Enter: ",
+		divider: "\n\n",
+
+		fmtItsAnothersTurn: "It's %c's turn.",
+		fmtItsYourTurn:     "It's your turn, %c!",
+		fmtYouWon:          "You won, %c!",
+		fmtAnotherWon:      "%c won.",
+	}
+}
 
 func (t *Templates) WaitingForOthers() string {
-	return WaitingForOthers
+	return t.waitingForOthers
 }
 
 func (t *Templates) ItsAnothersTurn(b game.Board, p game.Player) string {
-	return fmt.Sprintf(FmtItsAnothersTurn, p) +
-		Divider +
-		Board(b)
+	return fmt.Sprintf(t.fmtItsAnothersTurn, p) +
+		t.divider +
+		board(b)
 }
 
 func (t *Templates) ItsYourTurn(b game.Board, p game.Player) string {
-	return fmt.Sprintf(FmtItsYourTurn, p) +
-		Divider +
-		Board(b) +
-		Divider +
-		Prompt
+	return fmt.Sprintf(t.fmtItsYourTurn, p) +
+		t.divider +
+		board(b) +
+		t.divider +
+		t.prompt
 }
 
 func (t *Templates) Stalemate(b game.Board) string {
-	return Stalemate +
-		Divider +
-		Board(b)
+	return t.stalemate +
+		t.divider +
+		board(b)
 }
 
 func (t *Templates) YouWon(b game.Board, p game.Player) string {
-	return fmt.Sprintf(FmtYouWon, p) +
-		Divider +
-		Board(b)
+	return fmt.Sprintf(t.fmtYouWon, p) +
+		t.divider +
+		board(b)
 }
 
 func (t *Templates) AnotherWon(b game.Board, p game.Player) string {
-	return fmt.Sprintf(FmtAnotherWon, p) +
-		Divider +
-		Board(b)
+	return fmt.Sprintf(t.fmtAnotherWon, p) +
+		t.divider +
+		board(b)
 }
 
-// Board returns the ASCII representation of a Board as a string.
-func Board(board game.Board) string {
+// board returns the ASCII representation of a board as a string.
+func board(board game.Board) string {
 	var b strings.Builder
 
 	for i := 0; i < len(board); i++ {
@@ -92,7 +108,7 @@ func Board(board game.Board) string {
 
 // Flash returns the current Board accompanied by a flash message.
 func (t *Templates) Flash(b game.Board, msg string) string {
-	return "Message: " + msg +
-		Divider +
-		Board(b)
+	return t.message + msg +
+		t.divider +
+		board(b)
 }
