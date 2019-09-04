@@ -5,6 +5,7 @@ import (
 	"t32/game"
 )
 
+// Random takes a Board and the current Player and returns a random legal Move.
 func Random(b game.Board, p game.Player) (int, int) {
 	moves := 0
 	for x, _ := range b {

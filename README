@@ -96,4 +96,9 @@ t32/clients:
 artificial intelligence to a Participant.
 
 
+                                   RUN TESTS
+
+Use the following command to run all available tests:
+
+        $ go test ./...
 [1]: https://golang.org/dl/
