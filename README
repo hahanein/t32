@@ -3,9 +3,16 @@ t32 - tic tac toe 2.0                                          Benjamin Westphal
 
                                      BUILD
 
-Download and install Go[1] and build the binary with the following command:
+Download and install Go[1] and build and run the binary with the following
+commands on Linux:
 
-        $ go build ./cmd/
+        $ go build -o bin ./cmd/
+        $ ./bin
+
+On Windows:
+        
+        $ go build -o bin.exe .\cmd\
+        $ .\bin.exe
 
 
                                   ARCHITECTURE
@@ -48,6 +55,28 @@ dependencies may only point inwards. This produces:
 
 Entities ecanpsulate core business rules. Use cases contain application
 specific business rules.
+
+
+                                    PACKAGES
+
+t32/game:
+
+        Holds the Game which provides methods to mutate it in a very limited
+number of ways. Everything you may or may not be allowed to do in a Game is
+encapsulated in this package.
+
+
+t32/actors:
+
+        Holds the Referee which serves the double purpose of (1) managing the
+Single Source Of Truth and (2) publishing its state. It also holds the
+Participant which encapsulates a kind of finite state machine. It models a 
+
+
+t32/clients:
+
+        Holds adapters which connect external agencies like a human user or an
+artificial intelligence to a Participant.
 
 
 [1]: https://golang.org/dl/
