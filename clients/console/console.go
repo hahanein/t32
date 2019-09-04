@@ -2,7 +2,6 @@
 package console
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"sync"
@@ -42,14 +41,14 @@ func New(t Templates, w io.Writer, r io.Reader) *Console {
 
 // WaitingForOthers is called when there need to be more Players before the
 // Game may start.
-func (c *Console) WaitingForOthers(ctx context.Context) {
+func (c *Console) WaitingForOthers() {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.WaitingForOthers()))
 }
 
 // ItsAnothersTurn is called when it is another Player's turn.
-func (c *Console) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Player) {
+func (c *Console) ItsAnothersTurn(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.ItsAnothersTurn(b, p)))
@@ -57,7 +56,7 @@ func (c *Console) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Play
 
 // ItsYourTurn is called when it is your turn. You will be prompted to input
 // coordinates.
-func (c *Console) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) (int, int) {
+func (c *Console) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 	c.Lock()
 	defer c.Unlock()
 	for {
@@ -83,28 +82,28 @@ func (c *Console) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) 
 
 // Stalemate is called when there are no more possible Moves but there's also
 // no winner.
-func (c *Console) Stalemate(ctx context.Context, b game.Board) {
+func (c *Console) Stalemate(b game.Board) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.Stalemate(b)))
 }
 
 // YouWon is called when you won the Game.
-func (c *Console) YouWon(ctx context.Context, b game.Board, p game.Player) {
+func (c *Console) YouWon(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.YouWon(b, p)))
 }
 
 // AnotherWon is called when another Player won the Game.
-func (c *Console) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
+func (c *Console) AnotherWon(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.AnotherWon(b, p)))
 }
 
 // Flash is called when a message is incoming.
-func (c *Console) Flash(ctx context.Context, b game.Board, msg string) {
+func (c *Console) Flash(b game.Board, msg string) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.Flash(b, msg)))

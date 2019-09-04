@@ -2,7 +2,6 @@ package console
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"strings"
 	"sync"
@@ -19,35 +18,35 @@ func TestDumbHandlers(t *testing.T) {
 	epyB := game.Board{}
 	epyP := game.NoPlayer
 
-	c.WaitingForOthers(context.Background())
+	c.WaitingForOthers()
 	have := w.String()
 	if have != want {
 		t.Fatalf("handler is broken: wanted %s have %s", want, have)
 	}
 	w.Reset()
 
-	c.ItsAnothersTurn(context.Background(), epyB, epyP)
+	c.ItsAnothersTurn(epyB, epyP)
 	have = w.String()
 	if have != want {
 		t.Fatalf("handler is broken: wanted %s have %s", want, have)
 	}
 	w.Reset()
 
-	c.Stalemate(context.Background(), epyB)
+	c.Stalemate(epyB)
 	have = w.String()
 	if have != want {
 		t.Fatalf("handler is broken: wanted %s have %s", want, have)
 	}
 	w.Reset()
 
-	c.AnotherWon(context.Background(), epyB, epyP)
+	c.AnotherWon(epyB, epyP)
 	have = w.String()
 	if have != want {
 		t.Fatalf("handler is broken: wanted %s have %s", want, have)
 	}
 	w.Reset()
 
-	c.YouWon(context.Background(), epyB, epyP)
+	c.YouWon(epyB, epyP)
 	have = w.String()
 	if have != want {
 		t.Fatalf("handler is broken: wanted %s have %s", want, have)
@@ -66,7 +65,7 @@ func TestItsYourTurn(t *testing.T) {
 	r := strings.NewReader(fmt.Sprintf("%dx%d", wantX, wantY))
 	c := &Console{sync.Mutex{}, &spyTemplates{want}, w, r}
 
-	haveX, haveY := c.ItsYourTurn(context.Background(), epyB, epyP)
+	haveX, haveY := c.ItsYourTurn(epyB, epyP)
 
 	have := w.String()
 	if have != want {

@@ -1,7 +1,6 @@
 package participant
 
 import (
-	"context"
 	"log"
 	"sync"
 	"t32/game"
@@ -9,13 +8,13 @@ import (
 )
 
 type Client interface {
-	WaitingForOthers(context.Context)
-	ItsAnothersTurn(context.Context, game.Board, game.Player)
-	ItsYourTurn(context.Context, game.Board, game.Player) (int, int)
-	Stalemate(context.Context, game.Board)
-	AnotherWon(context.Context, game.Board, game.Player)
-	YouWon(context.Context, game.Board, game.Player)
-	Flash(context.Context, game.Board, string)
+	WaitingForOthers()
+	ItsAnothersTurn(game.Board, game.Player)
+	ItsYourTurn(game.Board, game.Player) (int, int)
+	Stalemate(game.Board)
+	AnotherWon(game.Board, game.Player)
+	YouWon(game.Board, game.Player)
+	Flash(game.Board, string)
 }
 
 type Referee interface {
@@ -58,19 +57,17 @@ func New(player game.Player, c Client, r Referee) *Participant {
 func (p *Participant) Update() {
 	p.Lock()
 
-	ctx, _ := context.WithCancel(context.Background())
-
 	switch p.Referee.Status() {
 	case game.StatusFinish:
 		b := p.Referee.Board()
 
 		switch winner := p.Referee.Winner(); winner {
 		case game.NoPlayer:
-			p.Client.Stalemate(ctx, b)
+			p.Client.Stalemate(b)
 		case p.Player:
-			p.Client.YouWon(ctx, b, winner)
+			p.Client.YouWon(b, winner)
 		default:
-			p.Client.AnotherWon(ctx, b, winner)
+			p.Client.AnotherWon(b, winner)
 		}
 
 		p.Done <- struct{}{}
@@ -80,7 +77,7 @@ func (p *Participant) Update() {
 
 		switch player := p.Referee.WhoIsNext(); player {
 		case p.Player:
-			x, y := p.ItsYourTurn(ctx, b, player)
+			x, y := p.ItsYourTurn(b, player)
 
 			m := game.Move{p.Player, x, y}
 
@@ -92,18 +89,18 @@ func (p *Participant) Update() {
 				fallthrough
 			case game.ErrMoveSquareDoesNotExist:
 				p.Unlock()
-				p.Flash(ctx, b, err.Error())
+				p.Flash(b, err.Error())
 				p.Update()
 				return
 			default:
 				log.Fatal(err)
 			}
 		default:
-			p.Client.ItsAnothersTurn(ctx, b, player)
+			p.Client.ItsAnothersTurn(b, player)
 		}
 
 	case game.StatusWaitingForPlayers:
-		p.Client.WaitingForOthers(ctx)
+		p.Client.WaitingForOthers()
 
 		switch err := p.Referee.PushPlayer(p.Player); err {
 		case nil:

@@ -1,7 +1,6 @@
 package computer
 
 import (
-	"context"
 	"t32/game"
 )
 
@@ -22,18 +21,18 @@ func New(a Algorithm) *Computer {
 
 // WaitingForOthers is called when there need to be more Players before the
 // Game may start.
-func (c *Computer) WaitingForOthers(ctx context.Context) {
+func (c *Computer) WaitingForOthers() {
 	// Do nothing.
 }
 
 // ItsAnothersTurn is called when it is another Player's turn.
-func (c *Computer) ItsAnothersTurn(ctx context.Context, b game.Board, p game.Player) {
+func (c *Computer) ItsAnothersTurn(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
 // ItsYourTurn is called when it is your turn. You will be prompted to input
 // coordinates.
-func (c *Computer) ItsYourTurn(ctx context.Context, b game.Board, p game.Player) (int, int) {
+func (c *Computer) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 	x, y := c.Algorithm(b, p)
 
 	return x, y
@@ -41,21 +40,21 @@ func (c *Computer) ItsYourTurn(ctx context.Context, b game.Board, p game.Player)
 
 // Stalemate is called when there are no more possible Moves but there's also
 // no winner.
-func (c *Computer) Stalemate(ctx context.Context, b game.Board) {
+func (c *Computer) Stalemate(b game.Board) {
 	// Do nothing.
 }
 
 // YouWon is called when you won the Game.
-func (c *Computer) YouWon(ctx context.Context, b game.Board, p game.Player) {
+func (c *Computer) YouWon(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
 // AnotherWon is called when another Player won the Game.
-func (c *Computer) AnotherWon(ctx context.Context, b game.Board, p game.Player) {
+func (c *Computer) AnotherWon(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
 // Flash is called when a message is incoming.
-func (c *Computer) Flash(ctx context.Context, b game.Board, msg string) {
+func (c *Computer) Flash(b game.Board, msg string) {
 	// Do nothing
 }

@@ -13,8 +13,8 @@ type spyReferee struct {
 
 	ErrResp error
 
-	FinishRespPlayer game.Player
-	FinishRespOk     bool
+	RespWinner game.Player
+	RespStatus game.Status
 }
 
 func (r *spyReferee) PushMove(m game.Move) error {
@@ -41,14 +41,14 @@ func (r *spyReferee) PushPlayer(p game.Player) error {
 	return nil
 }
 
-func (r *spyReferee) WhoIsNext() (game.Player, error) {
-	if r.ErrResp != nil {
-		return r.NextPlayer, r.ErrResp
-	}
-
-	return r.NextPlayer, nil
+func (r *spyReferee) WhoIsNext() game.Player {
+	return r.NextPlayer
 }
 
-func (r *spyReferee) Finish() (game.Player, bool) {
-	return r.FinishRespPlayer, r.FinishRespOk
+func (r *spyReferee) Winner() game.Player {
+	return r.RespWinner
+}
+
+func (r *spyReferee) Status() game.Status {
+	return r.RespStatus
 }
