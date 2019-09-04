@@ -2,7 +2,6 @@ package game
 
 import (
 	"errors"
-	"unicode"
 )
 
 var (
@@ -74,7 +73,7 @@ func (ps Players) PushPlayer(p Player) (Players, error) {
 		}
 	}
 
-	if p == NoPlayer || !unicode.IsPrint(rune(p)) {
+	if !p.IsLegal() {
 		return ps, ErrPlayerIllegal
 	}
 

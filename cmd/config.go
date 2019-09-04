@@ -28,5 +28,25 @@ func configFromFilepath(fp string) (Config, error) {
 		return res, err
 	}
 
+	if !res.Player1.IsLegal() {
+		return res, game.ErrPlayerIllegal
+	}
+
+	if !res.Player2.IsLegal() {
+		return res, game.ErrPlayerIllegal
+	}
+
+	if !res.Player3.IsLegal() {
+		return res, game.ErrPlayerIllegal
+	}
+
+	m := make(map[game.Player]struct{})
+	m[res.Player1] = struct{}{}
+	m[res.Player2] = struct{}{}
+	m[res.Player3] = struct{}{}
+	if len(m) != 3 {
+		return res, game.ErrPlayerExists
+	}
+
 	return res, nil
 }

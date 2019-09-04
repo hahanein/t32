@@ -26,8 +26,8 @@ func (p *Player) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	for _, r := range raw {
-		*p = Player(r)
+	if len(raw) == 1 {
+		*p = Player(raw[0])
 
 		return nil
 	}

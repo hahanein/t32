@@ -15,6 +15,23 @@ On Windows:
         $ .\bin.exe
 
 
+                                 CONFIGURATION
+
+Place a config.json in the current directory or use its path as an argument to
+the -config flag:
+
+        $ ./bin -config /path/to/config.json
+
+The configuration file must be formatted as follows:
+
+        {
+          "size": 3,
+          "player1": "A",
+          "player2": "B",
+          "player3": "C"
+        }
+
+
                                   ARCHITECTURE
 
 This program is made up of several layers:
