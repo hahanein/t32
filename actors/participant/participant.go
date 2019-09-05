@@ -1,3 +1,7 @@
+// Package participant provides data structures and functions that provide a
+// unified interface through which external agencies may participate in a Game
+// either as Players or as spectators.
+
 package participant
 
 import (
@@ -28,9 +32,8 @@ type Referee interface {
 	PushPlayer(p game.Player) error
 }
 
-// Participant is a potential Player in the Game but it might just be a
-// spectator, too. Since every Observer will receive updates irrespective of
-// their success in creating a Player in the Game.
+// Participant may be a Player in a Game or a spectator. It provides a unified
+// interface for external agencies.
 type Participant struct {
 	sync.Mutex
 	Referee

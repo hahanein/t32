@@ -6,7 +6,7 @@ import (
 
 func TestAttach(t *testing.T) {
 	s := new(Subject)
-	o := new(SpyObserver)
+	o := new(spyObserver)
 
 	before := len(s.Observers)
 
@@ -29,7 +29,7 @@ func TestNotify(t *testing.T) {
 	n := 3
 
 	for i := 0; i < n; i++ {
-		s.Attach(&SpyObserver{done})
+		s.Attach(&spyObserver{done})
 	}
 
 	s.Notify()

@@ -1,9 +1,9 @@
 package referee
 
-type SpyObserver struct {
+type spyObserver struct {
 	ch chan struct{}
 }
 
-func (o *SpyObserver) Update() {
+func (o *spyObserver) Update() {
 	o.ch <- struct{}{}
 }

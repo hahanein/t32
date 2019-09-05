@@ -9,11 +9,6 @@ commands on Linux:
         $ go build -o bin ./cmd/
         $ ./bin
 
-On Windows:
-        
-        $ go build -o bin.exe .\cmd\
-        $ .\bin.exe
-
 
                                  CONFIGURATION
 
@@ -30,6 +25,7 @@ The configuration file must be formatted as follows:
           "player2": "B",
           "player3": "C"
         }
+
 
 
                                   ARCHITECTURE
@@ -70,16 +66,13 @@ dependencies may only point inwards. This produces:
           interface or database
         - testability
 
-Entities ecanpsulate core business rules. Use cases contain application
-specific business rules.
-
 
                                     PACKAGES
 
 t32/game:
 
-        Holds the Game which provides methods to mutate it in a very limited
-number of ways. Everything you may or may not be allowed to do in a Game is
+        Holds the Game which provides methods to mutate it in a limited number
+of ways. Everything you may or may not be allowed to do in a Game is
 encapsulated in this package.
 
 
@@ -87,7 +80,8 @@ t32/actors:
 
         Holds the Referee which serves the double purpose of (1) managing the
 Single Source Of Truth and (2) publishing its state. It also holds the
-Participant which encapsulates a kind of finite state machine. It models a 
+Participant which provides a unified interface through which external agencies
+may participate in the Game either as Players or as spectators.
 
 
 t32/clients:
@@ -95,10 +89,17 @@ t32/clients:
         Holds adapters which connect external agencies like a human user or an
 artificial intelligence to a Participant.
 
+You may use godoc to read the documentation. For example you may read the docs
+for the game package on the command line with the following command:
+
+        $ godoc ./game/ | less
+
 
                                    RUN TESTS
 
 Use the following command to run all available tests:
 
         $ go test ./...
+
+
 [1]: https://golang.org/dl/

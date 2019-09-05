@@ -1,5 +1,5 @@
-// console provides data structures and functions that serve as a bridge
-// between a single console user interface and multiple Participants.
+// Package console provides data structures and functions that serve as a
+// bridge between a single console user interface and multiple Participants.
 
 package console
 
@@ -42,23 +42,23 @@ func New(t Templates, w io.Writer, r io.Reader) *Console {
 	return c
 }
 
-// WaitingForOthers is called when there need to be more Players before the
-// Game may start.
+// WaitingForOthers presents a waiting screen to the user.
 func (c *Console) WaitingForOthers() {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.WaitingForOthers()))
 }
 
-// ItsAnothersTurn is called when it is another Player's turn.
+// ItsAnothersTurn presents the Game Board and a message denoting the Player
+// that gets to make the next Move.
 func (c *Console) ItsAnothersTurn(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.ItsAnothersTurn(b, p)))
 }
 
-// ItsYourTurn is called when it is your turn. You will be prompted to input
-// coordinates.
+// ItsYourTurn presents the Game Board and a Message prompting you to insert
+// coordinates which will be parsed and returned to the caller.
 func (c *Console) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 	c.Lock()
 	defer c.Unlock()
@@ -83,30 +83,29 @@ func (c *Console) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 	}
 }
 
-// Stalemate is called when there are no more possible Moves but there's also
-// no winner.
+// Stalemate presents the Game Board and a message denoting a stalemate.
 func (c *Console) Stalemate(b game.Board) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.Stalemate(b)))
 }
 
-// YouWon is called when you won the Game.
+// YouWon presents the Game Board and a message about you having won the game.
 func (c *Console) YouWon(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.YouWon(b, p)))
 }
 
-// AnotherWon is called when another Player won the Game.
+// AnotherWon presents the Game Board and a message denoting the winning
+// Player.
 func (c *Console) AnotherWon(b game.Board, p game.Player) {
 	c.Lock()
 	defer c.Unlock()
 	c.Write([]byte(c.Templates.AnotherWon(b, p)))
 }
 
-// Flash is called when a message is incoming. It prints a message that may be
-// cleared after a second.
+// Flash presents the Game Board and an arbitrary message to the Player.
 func (c *Console) Flash(b game.Board, msg string) {
 	c.Lock()
 	defer c.Unlock()

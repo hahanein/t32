@@ -7,8 +7,12 @@ import "unicode"
 // the NoPlayer character.
 type Player rune
 
+// Players is represents the list of actual Players in a Game. To this end it
+// provides methods to safely mutate its state. It is NOT meant to be used as
+// an arbitrary list of Players.
 type Players []Player
 
+// NoPlayer is a Player reserved to denote no Player.
 var NoPlayer Player
 
 // IsLegal checks a Player character is printable and not one of the reserved

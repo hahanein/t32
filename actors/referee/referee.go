@@ -1,5 +1,5 @@
-// referee contains data structures and methods for the management of a Game
-// and pushing notifications about changes in its state.
+// Package referee contains data structures and methods for managing a Game in
+// an asynchronous setting.
 
 package referee
 
@@ -49,6 +49,8 @@ func (r *Referee) PushMove(m game.Move) error {
 	return nil
 }
 
+// WhoIsNext returns the Player that gets to make the next move if there is
+// one. Otherwise it returns the NoPlayer Player.
 func (r *Referee) WhoIsNext() game.Player {
 	r.RLock()
 	defer r.RUnlock()
@@ -56,6 +58,7 @@ func (r *Referee) WhoIsNext() game.Player {
 	return r.Game.WhoIsNext()
 }
 
+// Status returns the current Game status.
 func (r *Referee) Status() game.Status {
 	r.RLock()
 	defer r.RUnlock()
@@ -63,6 +66,8 @@ func (r *Referee) Status() game.Status {
 	return r.Game.Status()
 }
 
+// Winner returns the winning Player if there is one. Otherwise it returns the
+// NoPlayer Player.
 func (r *Referee) Winner() game.Player {
 	r.RLock()
 	defer r.RUnlock()
@@ -70,6 +75,7 @@ func (r *Referee) Winner() game.Player {
 	return r.Game.Winner()
 }
 
+// Board returns the Board representation of the current Game.
 func (r *Referee) Board() game.Board {
 	r.RLock()
 	defer r.RUnlock()

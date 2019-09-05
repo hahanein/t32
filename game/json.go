@@ -5,6 +5,8 @@ import (
 	"errors"
 )
 
+// UnmarshalJSON parses a JSON-encoded Size and stores the result in the value
+// pointed to by s.
 func (s *Size) UnmarshalJSON(bytes []byte) error {
 	var raw int
 
@@ -18,6 +20,8 @@ func (s *Size) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
+// UnmarshalJSON parses a JSON-encoded Player and stores the result in the
+// value pointed to by p.
 func (p *Player) UnmarshalJSON(bytes []byte) error {
 	var raw string
 

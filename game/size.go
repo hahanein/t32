@@ -1,14 +1,8 @@
 package game
 
-import "errors"
-
 const (
 	MaxSize = 10
 	MinSize = 3
-)
-
-var (
-	ErrIllegalSize = errors.New("game: illegal size")
 )
 
 type Size int

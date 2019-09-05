@@ -1,4 +1,5 @@
-// templates contains methods for the plaintext presentation of Game state.
+// Package templates contains methods for the plaintext presentation of Game
+// state.
 
 package templates
 
@@ -24,6 +25,8 @@ type Templates struct {
 	fmtAnotherWon      string
 }
 
+// New returns a new Templates struct complete with english language
+// constructs.
 func New() *Templates {
 	return &Templates{
 		waitingForOthers: "Waiting for others.",

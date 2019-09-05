@@ -13,7 +13,7 @@ func TestBoard(t *testing.T) {
 	g.PushPlayer('C')
 	g.PushMove(game.Move{'A', 1, 2})
 
-	have := Board(g.Board())
+	have := board(g.Board())
 	want := strings.TrimSpace(`
 . . . .
 . . . .

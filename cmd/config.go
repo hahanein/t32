@@ -6,6 +6,7 @@ import (
 	"t32/game"
 )
 
+// Config is used to configure the Board Size as well as the Player characters.
 type Config struct {
 	Size game.Size `json:"size"`
 
@@ -14,6 +15,8 @@ type Config struct {
 	Player3 game.Player `json:"player3"`
 }
 
+// configFromFilepath parses a config file in a given path and on success
+// returns a Config struct. Otherwise it returns an error.
 func configFromFilepath(fp string) (Config, error) {
 	var res Config
 
@@ -40,6 +43,7 @@ func configFromFilepath(fp string) (Config, error) {
 		return res, game.ErrPlayerIllegal
 	}
 
+	// Check if all Players are unique and return an error if they are not.
 	m := make(map[game.Player]struct{})
 	m[res.Player1] = struct{}{}
 	m[res.Player2] = struct{}{}

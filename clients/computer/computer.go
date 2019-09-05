@@ -1,4 +1,5 @@
-// computer contains data structures and methods to run an automated headless client.
+// Package computer contains data structures and methods to run an automated
+// headless client.
 
 package computer
 
@@ -25,42 +26,40 @@ func New(a Algorithm) *Computer {
 	return c
 }
 
-// WaitingForOthers is called when there need to be more Players before the
-// Game may start.
+// WaitingForOthers does nothing.
 func (c *Computer) WaitingForOthers() {
 	// Do nothing.
 }
 
-// ItsAnothersTurn is called when it is another Player's turn.
+// ItsAnothersTurn does nothing.
 func (c *Computer) ItsAnothersTurn(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
-// ItsYourTurn is called when it is your turn. You will be prompted to input
-// coordinates.
+// ItsYourTurn uses the provided algorithm to produce and return new
+// coordinates form a given Board and Player.
 func (c *Computer) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 	x, y := c.Algorithm(b, p)
 
 	return x, y
 }
 
-// Stalemate is called when there are no more possible Moves but there's also
-// no winner.
+// Stalemate does nothing.
 func (c *Computer) Stalemate(b game.Board) {
 	// Do nothing.
 }
 
-// YouWon is called when you won the Game.
+// YouWon does nothing.
 func (c *Computer) YouWon(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
-// AnotherWon is called when another Player won the Game.
+// AnotherWon does nothing.
 func (c *Computer) AnotherWon(b game.Board, p game.Player) {
 	// Do nothing.
 }
 
-// Flash is called when a message is incoming.
+// Flash does nothing.
 func (c *Computer) Flash(b game.Board, msg string) {
 	// Do nothing
 }

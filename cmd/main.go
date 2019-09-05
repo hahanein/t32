@@ -66,8 +66,8 @@ func main() {
 	p2 := participant.New(cfg.Player2, cConsole, r)
 	p3 := participant.New(cfg.Player3, cComputer, r)
 
-	// Block until all Participants declared them being done by having send
-	// an empty struct through the Done channel.
+	// Block until all Participants have signaled them being done by having
+	// sent an empty struct through the Done channel.
 	<-p1.Done
 	<-p2.Done
 	<-p3.Done
