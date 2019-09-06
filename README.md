@@ -74,7 +74,9 @@ about the outside world (encoding formats) but it is merely a few lines of
 boiler plate that have zero effect on the rest of that package and the
 best alternative might be much more confusing.
 
-Participants react asynchronously to changes in the state of the game.
+Participants react asynchronously to changes in the state of the game. This
+opens up the possibilities for alternative, distributed implementations of the
+Client interface that are more common in modern multiplayer games.
 
 
 Packages
@@ -83,18 +85,18 @@ Packages
 t32/game
 --------
 
-Holds the Game which provides methods to mutate it in a limited number of ways.
-Everything you may or may not be allowed to do in a Game is encapsulated in
-this package.
+Holds the Game which provides methods to mutate itself in a limited number of
+ways. Everything you may or may not be allowed to do in a Game is encapsulated
+in this package.
 
 
 t32/actors
 ----------
 
-Holds the Referee which serves the double purpose of (1) managing the Single
-Source Of Truth and (2) publishing its state. It also holds the Participant
-which provides a unified interface through which external agencies may
-participate in the Game either as Players or as spectators.
+Holds the Referee which serves the double purpose of (1) managing the Game's
+single source of truth and (2) publishing its state. It also holds the
+Participant which provides a unified interface through which external agencies
+may participate in the Game either as Players or as spectators.
 
 
 t32/clients
