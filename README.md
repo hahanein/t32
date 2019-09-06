@@ -1,8 +1,8 @@
 t32 - tic tac toe 2.0
 
 
-                                     Build
-                                     =====
+Build
+=====
 
 Download and install [Go >1.11][1]. Then build and run the binary with the
 following commands on Linux:
@@ -11,8 +11,8 @@ following commands on Linux:
         $ ./bin
 
 
-                                 Configuration
-                                 =============
+Configuration
+=============
 
 Place a config.json in the current directory or use its path as an argument to
 the -config flag:
@@ -30,8 +30,8 @@ The configuration file must be formatted as follows:
 
 
 
-                                  Architecture
-                                  ============
+Architecture
+============
 
 This program is made up of several layers:
 
@@ -77,8 +77,8 @@ best alternative might be much more confusing.
 Participants react asynchronously to changes in the state of the game.
 
 
-                                    Packages
-                                    ========
+Packages
+========
 
 t32/game
 --------
@@ -109,12 +109,14 @@ for the game package on the command line with the following command:
         $ godoc ./game/ | less
 
 
-                                   Run Tests
-                                   =========
+Run Tests
+=========
 
 Use the following command to run all available tests:
 
         $ go test ./...
 
+
+---
 
 [1]: https://golang.org/dl/
