@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	version = "v0.1.0"
+	version = "v1.0.0"
 
 	// Comand line flags.
 	pathToConfig   string
@@ -47,7 +47,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Pass that Game to a new Referee.
+	// Pass a copy of that Game to a new Referee.
 	r := referee.New(*g)
 
 	// Create a multiplayer console client.
@@ -66,8 +66,8 @@ func main() {
 	p2 := participant.New(cfg.Player2, cConsole, r)
 	p3 := participant.New(cfg.Player3, cComputer, r)
 
-	// Block until all Participants have signaled them being done by having
-	// sent an empty struct through the Done channel.
+	// Block until all Participants have signaled being done by having sent
+	// an empty struct over their Done channels.
 	<-p1.Done
 	<-p2.Done
 	<-p3.Done
