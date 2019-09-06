@@ -65,9 +65,9 @@ This program is made up of several layers:
 The outer circles are mechanisms. The inner circles are policies. Source code
 dependencies may only point inwards. This produces:
 
-        - independence of any external agency such as a framework, user
-          interface or database
-        - testability
+- independence of any external agency such as a framework, user interface or
+  database
+- testability
 
 Of course rules exist to be broken and so game/json.go encapsulates knowledge
 about the outside world (encoding formats) but it is merely a few lines of
