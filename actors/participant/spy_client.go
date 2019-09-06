@@ -11,18 +11,30 @@ type spyClient struct {
 	game.Board
 	game.Player
 	Message string
+
+	ReqWaitingForOthers bool
+	ReqItsAnothersTurn  bool
+	ReqItsYourTurn      bool
+	ReqStalemate        bool
+	ReqAnotherWon       bool
+	ReqYouWon           bool
+	ReqFlash            bool
 }
 
 func (c *spyClient) WaitingForOthers() {
-	// Do nothing.
+	c.ReqWaitingForOthers = true
 }
 
 func (c *spyClient) ItsAnothersTurn(b game.Board, p game.Player) {
+	c.ReqItsAnothersTurn = true
+
 	c.Board = b
 	c.Player = p
 }
 
 func (c *spyClient) ItsYourTurn(b game.Board, p game.Player) (int, int) {
+	c.ReqItsYourTurn = true
+
 	c.Board = b
 	c.Player = p
 
@@ -39,20 +51,24 @@ func (c *spyClient) ItsYourTurn(b game.Board, p game.Player) (int, int) {
 }
 
 func (c *spyClient) Stalemate(b game.Board) {
+	c.ReqStalemate = true
 	c.Board = b
 }
 
 func (c *spyClient) AnotherWon(b game.Board, p game.Player) {
+	c.ReqAnotherWon = true
 	c.Board = b
 	c.Player = p
 }
 
 func (c *spyClient) YouWon(b game.Board, p game.Player) {
+	c.ReqYouWon = true
 	c.Board = b
 	c.Player = p
 }
 
 func (c *spyClient) Flash(b game.Board, msg string) {
+	c.ReqFlash = true
 	c.Board = b
 	c.Message = msg
 }

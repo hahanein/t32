@@ -5,16 +5,15 @@ import "t32/game"
 type spyReferee struct {
 	spySubject
 
-	NextPlayer game.Player
-
 	game.Players
 	game.History
-	RespBoard game.Board
 
 	ErrResp error
 
-	RespWinner game.Player
-	RespStatus game.Status
+	RespWinner    game.Player
+	RespStatus    game.Status
+	RespBoard     game.Board
+	RespWhoIsNext game.Player
 }
 
 func (r *spyReferee) PushMove(m game.Move) error {
@@ -42,7 +41,7 @@ func (r *spyReferee) PushPlayer(p game.Player) error {
 }
 
 func (r *spyReferee) WhoIsNext() game.Player {
-	return r.NextPlayer
+	return r.RespWhoIsNext
 }
 
 func (r *spyReferee) Winner() game.Player {
