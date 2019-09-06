@@ -1,6 +1,14 @@
 t32 - tic tac toe 2.0
 
 
+How to play
+===========
+
+When it is your turn enter coordinates in the form of NxN where N is a natural
+number. To place your player in the first square in the top-left corner enter
+0x0.
+
+
 Build
 =====
 
