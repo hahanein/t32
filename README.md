@@ -1,16 +1,18 @@
-t32 - tic tac toe 2.0                                          Benjamin Westphal
+t32 - tic tac toe 2.0
 
 
-                                     BUILD
+                                     Build
+                                     =====
 
-Download and install Go[1] and build and run the binary with the following
-commands on Linux:
+Download and install [Go >1.11][1]. Then build and run the binary with the
+following commands on Linux:
 
         $ go build -o bin ./cmd/
         $ ./bin
 
 
-                                 CONFIGURATION
+                                 Configuration
+                                 =============
 
 Place a config.json in the current directory or use its path as an argument to
 the -config flag:
@@ -28,7 +30,8 @@ The configuration file must be formatted as follows:
 
 
 
-                                  ARCHITECTURE
+                                  Architecture
+                                  ============
 
 This program is made up of several layers:
 
@@ -66,27 +69,38 @@ dependencies may only point inwards. This produces:
           interface or database
         - testability
 
+Of course rules exist to be broken and so game/json.go encapsulates knowledge
+about the outside world (encoding formats) but it is merely a few lines of
+boiler plate that have zero effect on the rest of that package and the
+best alternative might be much more confusing.
 
-                                    PACKAGES
-
-t32/game:
-
-        Holds the Game which provides methods to mutate it in a limited number
-of ways. Everything you may or may not be allowed to do in a Game is
-encapsulated in this package.
+Participants react asynchronously to changes in the state of the game.
 
 
-t32/actors:
+                                    Packages
+                                    ========
 
-        Holds the Referee which serves the double purpose of (1) managing the
-Single Source Of Truth and (2) publishing its state. It also holds the
-Participant which provides a unified interface through which external agencies
-may participate in the Game either as Players or as spectators.
+t32/game
+--------
+
+Holds the Game which provides methods to mutate it in a limited number of ways.
+Everything you may or may not be allowed to do in a Game is encapsulated in
+this package.
 
 
-t32/clients:
+t32/actors
+----------
 
-        Holds adapters which connect external agencies like a human user or an
+Holds the Referee which serves the double purpose of (1) managing the Single
+Source Of Truth and (2) publishing its state. It also holds the Participant
+which provides a unified interface through which external agencies may
+participate in the Game either as Players or as spectators.
+
+
+t32/clients
+-----------
+
+Holds adapters which connect external agencies like a human user or an
 artificial intelligence to a Participant.
 
 You may use godoc to read the documentation. For example you may read the docs
@@ -95,7 +109,8 @@ for the game package on the command line with the following command:
         $ godoc ./game/ | less
 
 
-                                   RUN TESTS
+                                   Run Tests
+                                   =========
 
 Use the following command to run all available tests:
 
