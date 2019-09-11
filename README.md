@@ -18,14 +18,23 @@ following commands on Linux:
         $ go build -o bin ./cmd/
         $ ./bin
 
+On Windows:
+
+        $ go.exe build -o bin.exe .\cmd\
+        $ .\bin.exe
+
 
 Configuration
 =============
 
 Place a config.json in the current directory or use its path as an argument to
-the -config flag:
+the -config flag on Linux:
 
         $ ./bin -config /path/to/config.json
+
+On Windows:
+        
+        $ .\bin.exe -condig .\path\to\config.json
 
 The configuration file must be formatted as follows:
 
@@ -114,17 +123,25 @@ Holds adapters which connect external agencies like a human user or an
 artificial intelligence to a Participant.
 
 You may use godoc to read the documentation. For example you may read the docs
-for the game package on the command line with the following command:
+for the game package on the command line with the following command on Linux:
 
         $ godoc ./game/ | less
+
+On Windows:
+
+        $ godoc.exe .\game\
 
 
 Run Tests
 =========
 
-Use the following command to run all available tests:
+Use the following command to run all available tests on Linux:
 
         $ go test ./...
+
+On Windows:
+
+        $ go.exe test .\...
 
 
 ---
