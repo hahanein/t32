@@ -34,7 +34,7 @@ the -config flag on Linux:
 
 On Windows:
         
-        $ .\bin.exe -condig .\path\to\config.json
+        $ .\bin.exe -config .\path\to\config.json
 
 The configuration file must be formatted as follows:
 
