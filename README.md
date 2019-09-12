@@ -127,10 +127,6 @@ for the game package on the command line with the following command on Linux:
 
         $ godoc ./game/ | less
 
-On Windows:
-
-        $ godoc.exe .\game\
-
 
 Run Tests
 =========
